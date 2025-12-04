@@ -1,0 +1,45 @@
+.header {
+  background: linear-gradient(135deg, var(--surface) 0%, var(--background) 100%);
+  border-bottom: 2px solid var(--primary);
+  padding: 3rem 2rem;
+  text-align: center;
+  box-shadow: 0 4px 6px var(--shadow);
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.logo {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace;
+}
+
+.logo-bracket {
+  color: var(--primary);
+  margin: 0 0.5rem;
+}
+
+.tagline {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  font-weight: 400;
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 2rem 1rem;
+  }
+  
+  .logo {
+    font-size: 2rem;
+  }
+  
+  .tagline {
+    font-size: 1rem;
+  }
+}
