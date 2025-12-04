@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "npm run generate-rss && vite build",
     "preview": "vite preview",
-    "deploy": "make deploy"
+    "deploy": "make deploy",
+    "generate-rss": "node scripts/generate-rss.js"
   },
   "dependencies": {
     "react": "^18.2.0",

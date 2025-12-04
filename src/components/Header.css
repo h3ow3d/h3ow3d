@@ -11,6 +11,13 @@
   margin: 0 auto;
 }
 
+.header-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
 .logo {
   font-size: 3rem;
   font-weight: 700;
@@ -22,6 +29,27 @@
 .logo-bracket {
   color: var(--primary);
   margin: 0 0.5rem;
+}
+
+.rss-link {
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  margin-top: -0.5rem;
+}
+
+.rss-link:hover {
+  color: var(--primary-dark);
+  background-color: var(--surface-light);
+  transform: scale(1.1);
+}
+
+.rss-link svg {
+  width: 24px;
+  height: 24px;
 }
 
 .tagline {

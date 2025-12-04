@@ -8,6 +8,9 @@ outputs:
   cloudfront_id:
     description: 'CloudFront distribution ID from Terraform outputs'
     value: ${{ steps.get-outputs.outputs.cloudfront_id }}
+  cloudfront_domain:
+    description: 'CloudFront domain name from Terraform outputs'
+    value: ${{ steps.get-outputs.outputs.cloudfront_domain }}
 
 runs:
   using: 'composite'
@@ -28,9 +31,10 @@ runs:
         
         echo "📊 Getting Terraform outputs..."
         
-        # Get bucket and distribution ID
+        # Get bucket, distribution ID, and CloudFront domain
         S3_BUCKET=$(terraform output -raw s3_bucket_name 2>/dev/null || echo "")
         CLOUDFRONT_ID=$(terraform output -raw cloudfront_distribution_id 2>/dev/null || echo "")
+        CLOUDFRONT_DOMAIN=$(terraform output -raw cloudfront_domain_name 2>/dev/null || echo "")
         
         # Output S3 bucket
         if [ -n "$S3_BUCKET" ]; then
@@ -46,4 +50,12 @@ runs:
           echo "cloudfront_id=$CLOUDFRONT_ID" >> $GITHUB_OUTPUT
         else
           echo "⚠️  No CloudFront distribution found in Terraform outputs"
+        fi
+        
+        # Output CloudFront domain
+        if [ -n "$CLOUDFRONT_DOMAIN" ]; then
+          echo "✅ Found CloudFront domain: $CLOUDFRONT_DOMAIN"
+          echo "cloudfront_domain=$CLOUDFRONT_DOMAIN" >> $GITHUB_OUTPUT
+        else
+          echo "⚠️  No CloudFront domain found in Terraform outputs"
         fi

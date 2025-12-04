@@ -5,6 +5,9 @@ node_modules/
 dist/
 build/
 
+# Generated files
+public/rss.xml
+
 # Environment variables
 .env
 .env.local
