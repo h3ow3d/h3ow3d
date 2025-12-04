@@ -31,6 +31,37 @@
   margin: 0 0.5rem;
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: -0.5rem;
+}
+
+.theme-toggle {
+  color: var(--primary);
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+}
+
+.theme-toggle:hover {
+  color: var(--primary-dark);
+  background-color: var(--surface-light);
+  transform: scale(1.1);
+}
+
+.theme-toggle svg {
+  width: 24px;
+  height: 24px;
+}
+
 .rss-link {
   color: var(--primary);
   display: flex;
@@ -38,7 +69,6 @@
   transition: all 0.3s ease;
   padding: 0.5rem;
   border-radius: 0.5rem;
-  margin-top: -0.5rem;
 }
 
 .rss-link:hover {

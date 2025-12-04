@@ -13,8 +13,24 @@
   --shadow: rgba(0, 0, 0, 0.3);
 }
 
-/* Blue Theme (default) */
-[data-theme="blue"] {
+/* Light Theme */
+[data-theme="light"] {
+  --primary: #3B82F6;
+  --primary-dark: #2563EB;
+  --secondary: #10B981;
+  --background: #F8FAFC;
+  --surface: #FFFFFF;
+  --surface-light: #F1F5F9;
+  --text: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #64748B;
+  --border: #E2E8F0;
+  --code-bg: #F1F5F9;
+  --shadow: rgba(0, 0, 0, 0.1);
+}
+
+/* Dark Theme (default) */
+[data-theme="dark"] {
   --primary: #3B82F6;
   --primary-dark: #2563EB;
   --secondary: #10B981;
@@ -26,51 +42,7 @@
   --text-muted: #94A3B8;
   --border: #334155;
   --code-bg: #1E293B;
-}
-
-/* Green Theme */
-[data-theme="green"] {
-  --primary: #10B981;
-  --primary-dark: #059669;
-  --secondary: #34D399;
-  --background: #064E3B;
-  --surface: #065F46;
-  --surface-light: #047857;
-  --text: #ECFDF5;
-  --text-secondary: #D1FAE5;
-  --text-muted: #A7F3D0;
-  --border: #047857;
-  --code-bg: #065F46;
-}
-
-/* Purple Theme */
-[data-theme="purple"] {
-  --primary: #A855F7;
-  --primary-dark: #9333EA;
-  --secondary: #C084FC;
-  --background: #2E1065;
-  --surface: #4C1D95;
-  --surface-light: #5B21B6;
-  --text: #FAF5FF;
-  --text-secondary: #E9D5FF;
-  --text-muted: #D8B4FE;
-  --border: #5B21B6;
-  --code-bg: #4C1D95;
-}
-
-/* Orange Theme */
-[data-theme="orange"] {
-  --primary: #F97316;
-  --primary-dark: #EA580C;
-  --secondary: #FB923C;
-  --background: #431407;
-  --surface: #7C2D12;
-  --surface-light: #9A3412;
-  --text: #FFF7ED;
-  --text-secondary: #FFEDD5;
-  --text-muted: #FED7AA;
-  --border: #9A3412;
-  --code-bg: #7C2D12;
+  --shadow: rgba(0, 0, 0, 0.3);
 }
 
 * {

@@ -5,17 +5,23 @@ import BlogPost from './components/BlogPost'
 import { posts } from './data/posts'
 import './App.css'
 
-const THEMES = ['blue', 'green', 'purple', 'orange']
-
 function App() {
   const [selectedPost, setSelectedPost] = useState(null)
+  const [theme, setTheme] = useState('dark')
 
   useEffect(() => {
-    // Randomly select a theme on mount
-    const randomTheme = THEMES[Math.floor(Math.random() * THEMES.length)]
-    document.documentElement.setAttribute('data-theme', randomTheme)
-    console.log(`🎨 Theme loaded: ${randomTheme}`)
+    // Check for saved theme preference or default to 'dark'
+    const savedTheme = localStorage.getItem('theme') || 'dark'
+    setTheme(savedTheme)
+    document.documentElement.setAttribute('data-theme', savedTheme)
   }, [])
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'dark' ? 'light' : 'dark'
+    setTheme(newTheme)
+    document.documentElement.setAttribute('data-theme', newTheme)
+    localStorage.setItem('theme', newTheme)
+  }
 
   const handlePostClick = (post) => {
     setSelectedPost(post)
@@ -28,7 +34,7 @@ function App() {
 
   return (
     <div className="app">
-      <Header />
+      <Header theme={theme} onToggleTheme={toggleTheme} />
       <main className="main-content">
         {selectedPost ? (
           <BlogPost post={selectedPost} onBack={handleBackToList} />
