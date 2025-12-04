@@ -159,11 +159,11 @@ Some ideas for future enhancements:
 
 - [ ] Add search functionality
 - [ ] Implement tags filtering
-- [ ] Add RSS feed
-- [ ] Dark/light theme toggle
+- [x] Add RSS feed
+- [x] Dark/light theme toggle
 - [ ] Reading time estimates
 - [ ] Share buttons
-- [ ] Comments system
+- [x] Comments system
 - [ ] Analytics integration
 
 ## 📄 License

@@ -1,0 +1,33 @@
+.comments-section {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 2px solid var(--border);
+}
+
+.comments-title {
+  font-size: 1.5rem;
+  color: var(--text);
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.giscus-container {
+  margin-top: 1rem;
+}
+
+/* Style adjustments for Giscus in both themes */
+.giscus-container iframe {
+  width: 100%;
+  border: none;
+}
+
+@media (max-width: 768px) {
+  .comments-section {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+  }
+  
+  .comments-title {
+    font-size: 1.25rem;
+  }
+}

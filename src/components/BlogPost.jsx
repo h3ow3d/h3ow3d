@@ -1,6 +1,7 @@
 import React from 'react'
 import { format } from 'date-fns'
 import ReactMarkdown from 'react-markdown'
+import Comments from './Comments'
 import './BlogPost.css'
 
 function BlogPost({ post, onBack }) {
@@ -29,6 +30,8 @@ function BlogPost({ post, onBack }) {
         <div className="post-body">
           <ReactMarkdown>{post.content}</ReactMarkdown>
         </div>
+        
+        <Comments postId={post.id} postTitle={post.title} />
       </article>
     </div>
   )
