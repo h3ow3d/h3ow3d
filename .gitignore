@@ -38,3 +38,6 @@ infra/terraform/override.tf
 infra/terraform/override.tf.json
 infra/terraform/*_override.tf
 infra/terraform/*_override.tf.json
+
+# Makefile generated config
+.terraform-config
