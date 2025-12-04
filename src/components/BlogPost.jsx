@@ -14,7 +14,6 @@ function BlogPost({ post, onBack }) {
       <article className="post-content">
         <header className="post-header">
           <div className="post-meta">
-            <span className="post-version-large">{post.version}</span>
             <span className="post-date-large">
               {format(new Date(post.date), 'MMMM dd, yyyy')}
             </span>

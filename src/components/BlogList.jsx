@@ -14,7 +14,6 @@ function BlogList({ posts, onPostClick }) {
             onClick={() => onPostClick(post)}
           >
             <div className="post-card-header">
-              <span className="post-version">{post.version}</span>
               <span className="post-date">
                 {format(new Date(post.date), 'MMM dd, yyyy')}
               </span>

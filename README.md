@@ -52,26 +52,37 @@ The app will be available at `http://localhost:5173`
 
 ## 📝 Adding New Posts
 
-1. Open `src/data/posts.js`
-2. Add a new post object to the array:
+Posts are managed as individual markdown files in `content/posts/`.
 
-```javascript
-{
-  id: 4,
-  version: 'v1.1.0',
-  date: '2024-12-10',
-  title: 'Your Post Title',
-  excerpt: 'A brief description of your post',
-  tags: ['tag1', 'tag2'],
-  content: `
-# Your Post Title
+### Create a new post:
+
+1. Create a file: `content/posts/2024-12-15-my-post.md`
+2. Add frontmatter and content:
+
+```markdown
+---
+id: 4
+date: 2024-12-15
+title: My Awesome Post
+excerpt: A brief description of what this post is about.
+tags:
+  - javascript
+  - tutorial
+---
+
+# My Awesome Post
 
 Your markdown content here...
-  `
-}
+```
+
+3. Generate posts file:
+```bash
+npm run generate-posts
 ```
 
 Posts automatically appear on the homepage in reverse chronological order.
+
+**See `POST_MANAGEMENT.md` for complete documentation.**
 
 ## 🎨 Customization
 
