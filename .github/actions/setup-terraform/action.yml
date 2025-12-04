@@ -24,7 +24,7 @@ runs:
         cd infra/terraform
         
         echo "🔧 Initializing Terraform..."
-        terraform init -backend=false
+        terraform init
         
         echo "📊 Getting Terraform outputs..."
         
