@@ -14,6 +14,7 @@ const logoVariations = [
   { prefix: 'echo ', suffix: '' },
   { prefix: 'cd ', suffix: '/' },
   { prefix: 'man ', suffix: '' },
+  { prefix: 'kubectl apply -f ', suffix: '.yaml' },
 ]
 
 function Header({ theme, onToggleTheme }) {
