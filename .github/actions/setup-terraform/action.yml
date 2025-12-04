@@ -23,23 +23,27 @@ runs:
       run: |
         cd infra/terraform
         
-        echo "Initializing Terraform..."
+        echo "🔧 Initializing Terraform..."
         terraform init -backend=false
         
-        echo "Getting Terraform outputs..."
+        echo "📊 Getting Terraform outputs..."
+        
+        # Get bucket and distribution ID
         S3_BUCKET=$(terraform output -raw s3_bucket_name 2>/dev/null || echo "")
         CLOUDFRONT_ID=$(terraform output -raw cloudfront_distribution_id 2>/dev/null || echo "")
         
+        # Output S3 bucket
         if [ -n "$S3_BUCKET" ]; then
-          echo "Found S3 bucket: $S3_BUCKET"
+          echo "✅ Found S3 bucket: $S3_BUCKET"
           echo "s3_bucket=$S3_BUCKET" >> $GITHUB_OUTPUT
         else
-          echo "No S3 bucket found in Terraform outputs"
+          echo "⚠️  No S3 bucket found in Terraform outputs"
         fi
         
+        # Output CloudFront distribution ID
         if [ -n "$CLOUDFRONT_ID" ]; then
-          echo "Found CloudFront distribution: $CLOUDFRONT_ID"
+          echo "✅ Found CloudFront distribution: $CLOUDFRONT_ID"
           echo "cloudfront_id=$CLOUDFRONT_ID" >> $GITHUB_OUTPUT
         else
-          echo "No CloudFront distribution found in Terraform outputs"
+          echo "⚠️  No CloudFront distribution found in Terraform outputs"
         fi
