@@ -114,7 +114,8 @@
   margin-bottom: 1.5rem;
 }
 
-.post-body ul, .post-body ol {
+.post-body ul,
+.post-body ol {
   margin-left: 2rem;
   margin-bottom: 1.5rem;
 }
@@ -177,23 +178,23 @@
   .post-content {
     padding: 1.5rem;
   }
-  
+
   .post-title-large {
     font-size: 1.75rem;
   }
-  
+
   .post-body {
     font-size: 1rem;
   }
-  
+
   .post-body h1 {
     font-size: 1.6rem;
   }
-  
+
   .post-body h2 {
     font-size: 1.3rem;
   }
-  
+
   .post-body pre {
     padding: 1rem;
   }

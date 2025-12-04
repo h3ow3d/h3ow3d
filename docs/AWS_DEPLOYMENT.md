@@ -11,14 +11,17 @@ This guide will help you deploy your h3ow3d blog to AWS using S3 and CloudFront.
 ## Option A: One-command IaC deploy (Terraform)
 
 Infra code is provided in `infra/terraform/` to create:
+
 - S3 bucket with static website hosting (SPA: index.html for 404s)
 - CloudFront distribution in front of S3 (always enabled)
 
 ### Prereqs
+
 - Terraform 1.5+
 - AWS CLI configured
 
 ### Usage
+
 ```bash
 cd infra/terraform
 terraform init
@@ -27,13 +30,16 @@ terraform apply -auto-approve -var="project_name=patch-notes" -var="aws_region=u
 ```
 
 Outputs will include:
+
 - `s3_website_endpoint` — the public website URL
 - `cloudfront_domain_name` — CDN URL (if enabled)
 
 Customize via variables in `variables.tf`:
+
 - `domain_name` and `acm_certificate_arn` if you want a custom domain
 
 To destroy:
+
 ```bash
 terraform destroy -auto-approve
 ```
@@ -70,6 +76,7 @@ Create a file `s3-bucket-policy.json`:
 ```
 
 Apply the policy:
+
 ```bash
 aws s3api put-bucket-policy --bucket YOUR_BUCKET_NAME --policy file://s3-bucket-policy.json
 ```
@@ -87,6 +94,7 @@ aws s3api put-bucket-policy --bucket YOUR_BUCKET_NAME --policy file://s3-bucket-
 ## Step 4: Update package.json
 
 Replace placeholders in the deploy script:
+
 ```json
 "deploy": "npm run build && aws s3 sync dist/ s3://YOUR_BUCKET_NAME --delete && aws cloudfront create-invalidation --distribution-id YOUR_DISTRIBUTION_ID --paths '/*'"
 ```

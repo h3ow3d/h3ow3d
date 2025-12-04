@@ -1,93 +1,93 @@
 version: 2
 updates:
   # Enable version updates for npm
-  - package-ecosystem: "npm"
-    directory: "/"
+  - package-ecosystem: 'npm'
+    directory: '/'
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "09:00"
+      interval: 'weekly'
+      day: 'monday'
+      time: '09:00'
     open-pull-requests-limit: 10
     reviewers:
-      - "h3ow3d"
+      - 'h3ow3d'
     assignees:
-      - "h3ow3d"
+      - 'h3ow3d'
     commit-message:
-      prefix: "chore(deps)"
-      include: "scope"
+      prefix: 'chore(deps)'
+      include: 'scope'
     labels:
-      - "dependencies"
-      - "npm"
+      - 'dependencies'
+      - 'npm'
     groups:
       # Group all production dependencies
       production-dependencies:
         patterns:
-          - "*"
+          - '*'
         exclude-patterns:
-          - "@types/*"
-          - "@vitejs/*"
-          - "vite"
+          - '@types/*'
+          - '@vitejs/*'
+          - 'vite'
         update-types:
-          - "minor"
-          - "patch"
+          - 'minor'
+          - 'patch'
       # Group all dev dependencies
       dev-dependencies:
         patterns:
-          - "@types/*"
-          - "@vitejs/*"
-          - "vite"
+          - '@types/*'
+          - '@vitejs/*'
+          - 'vite'
         update-types:
-          - "minor"
-          - "patch"
-    
+          - 'minor'
+          - 'patch'
+
   # Enable version updates for GitHub Actions
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  - package-ecosystem: 'github-actions'
+    directory: '/'
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "09:00"
+      interval: 'weekly'
+      day: 'monday'
+      time: '09:00'
     open-pull-requests-limit: 5
     reviewers:
-      - "h3ow3d"
+      - 'h3ow3d'
     assignees:
-      - "h3ow3d"
+      - 'h3ow3d'
     commit-message:
-      prefix: "chore(ci)"
-      include: "scope"
+      prefix: 'chore(ci)'
+      include: 'scope'
     labels:
-      - "dependencies"
-      - "github-actions"
+      - 'dependencies'
+      - 'github-actions'
     groups:
       github-actions:
         patterns:
-          - "*"
+          - '*'
         update-types:
-          - "minor"
-          - "patch"
+          - 'minor'
+          - 'patch'
 
   # Enable version updates for Terraform
-  - package-ecosystem: "terraform"
-    directory: "/infra/terraform"
+  - package-ecosystem: 'terraform'
+    directory: '/infra/terraform'
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "09:00"
+      interval: 'weekly'
+      day: 'monday'
+      time: '09:00'
     open-pull-requests-limit: 5
     reviewers:
-      - "h3ow3d"
+      - 'h3ow3d'
     assignees:
-      - "h3ow3d"
+      - 'h3ow3d'
     commit-message:
-      prefix: "chore(infra)"
-      include: "scope"
+      prefix: 'chore(infra)'
+      include: 'scope'
     labels:
-      - "dependencies"
-      - "terraform"
+      - 'dependencies'
+      - 'terraform'
     groups:
       terraform-providers:
         patterns:
-          - "*"
+          - '*'
         update-types:
-          - "minor"
-          - "patch"
+          - 'minor'
+          - 'patch'

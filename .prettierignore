@@ -1,0 +1,5 @@
+src/data/posts.js
+public/rss.xml
+package-lock.json
+dist/
+node_modules/

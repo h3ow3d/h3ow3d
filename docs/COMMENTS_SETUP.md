@@ -11,7 +11,7 @@ Giscus is a comments system powered by GitHub Discussions. It's free, open-sourc
 
 ### 1. Enable GitHub Discussions
 
-1. Go to your repository: https://github.com/h3ow3d/h3ow3d
+1. Go to your repository: <https://github.com/h3ow3d/h3ow3d>
 2. Click **Settings**
 3. Scroll down to **Features**
 4. Check ✅ **Discussions**
@@ -28,7 +28,7 @@ Giscus is a comments system powered by GitHub Discussions. It's free, open-sourc
 
 ### 3. Install Giscus App
 
-1. Go to https://github.com/apps/giscus
+1. Go to <https://github.com/apps/giscus>
 2. Click **Install**
 3. Select **Only select repositories**
 4. Choose **h3ow3d/h3ow3d**
@@ -36,7 +36,7 @@ Giscus is a comments system powered by GitHub Discussions. It's free, open-sourc
 
 ### 4. Get Your Configuration
 
-1. Go to https://giscus.app
+1. Go to <https://giscus.app>
 2. Fill in the configuration:
    - **Repository**: h3ow3d/h3ow3d
    - **Page ↔️ Discussions Mapping**: Choose "Discussion title contains page `pathname`" or "specific term"
@@ -88,6 +88,7 @@ With your actual IDs from step 4.
 ## Moderation
 
 You can moderate comments by:
+
 - Managing discussions in your GitHub repo
 - Locking discussions
 - Hiding or deleting comments
@@ -99,5 +100,5 @@ If you prefer not to enable comments, you can remove the `<Comments />` componen
 
 ## Documentation
 
-- Giscus: https://giscus.app
-- GitHub Discussions: https://docs.github.com/en/discussions
+- Giscus: <https://giscus.app>
+- GitHub Discussions: <https://docs.github.com/en/discussions>

@@ -1,7 +1,7 @@
 ---
 id: 3
 date: 2024-11-10
-title: "React Performance: Lessons from a Slow App"
+title: 'React Performance: Lessons from a Slow App'
 excerpt: How I improved my React app performance by 300% through code splitting, memoization, and lazy loading.
 tags:
   - react
@@ -9,13 +9,12 @@ tags:
   - frontend
 ---
 
-# React Performance: Lessons from a Slow App
-
 My React dashboard was getting slow. Really slow. Here's how I fixed it.
 
 ## The Problem
 
 Initial render time: **4.2 seconds** 😱
+
 - Bundle size: 2.3MB
 - Unnecessary re-renders everywhere
 - No code splitting
@@ -23,26 +22,31 @@ Initial render time: **4.2 seconds** 😱
 ## Solutions Applied
 
 ### 1. Code Splitting
+
 ```javascript
 // Before: Import everything
-import Dashboard from './Dashboard';
+import Dashboard from './Dashboard'
 
 // After: Lazy load
-const Dashboard = lazy(() => import('./Dashboard'));
+const Dashboard = lazy(() => import('./Dashboard'))
 ```
 
 **Result**: Initial bundle down to 400KB
 
 ### 2. Memoization
+
 Used `React.memo` and `useMemo` strategically:
+
 ```javascript
 const MemoizedChart = React.memo(Chart, (prev, next) => {
-  return prev.data === next.data;
-});
+  return prev.data === next.data
+})
 ```
 
 ### 3. Virtual Scrolling
+
 For long lists, implemented react-window:
+
 - Renders only visible items
 - Handles 10,000+ items smoothly
 

@@ -54,7 +54,7 @@ The app will be available at `http://localhost:5173`
 
 Posts are managed as individual markdown files in `content/posts/`.
 
-### Create a new post:
+### Create a new post
 
 1. Create a file: `content/posts/2024-12-15-my-post.md`
 2. Add frontmatter and content:
@@ -75,7 +75,8 @@ tags:
 Your markdown content here...
 ```
 
-3. Generate posts file:
+1. Generate posts file:
+
 ```bash
 npm run generate-posts
 ```
@@ -92,10 +93,10 @@ Edit CSS variables in `src/index.css`:
 
 ```css
 :root {
-  --primary: #3B82F6;        /* Blue */
-  --secondary: #10B981;      /* Green */
-  --background: #0F172A;     /* Dark background */
-  --text: #F1F5F9;           /* Light text */
+  --primary: #3b82f6; /* Blue */
+  --secondary: #10b981; /* Green */
+  --background: #0f172a; /* Dark background */
+  --text: #f1f5f9; /* Light text */
 }
 ```
 
@@ -139,13 +140,15 @@ In `package.json`, replace placeholders:
 
 ### Step 3: Deploy
 
+````bash
+npm run deploy
 ```bash
 npm run deploy
-```
+````
 
 ## 📁 Project Structure
 
-```
+```text
 patch-notes/
 ├── public/
 │   └── favicon.svg           # Site icon

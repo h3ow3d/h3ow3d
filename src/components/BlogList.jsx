@@ -8,26 +8,20 @@ function BlogList({ posts, onPostClick }) {
       <h2 className="section-title">Recent Updates</h2>
       <div className="posts-grid">
         {posts.map((post) => (
-          <article 
-            key={post.id} 
-            className="post-card"
-            onClick={() => onPostClick(post)}
-          >
+          <article key={post.id} className="post-card" onClick={() => onPostClick(post)}>
             <div className="post-card-header">
-              <span className="post-date">
-                {format(new Date(post.date), 'MMM dd, yyyy')}
-              </span>
+              <span className="post-date">{format(new Date(post.date), 'MMM dd, yyyy')}</span>
             </div>
             <h3 className="post-title">{post.title}</h3>
             <p className="post-excerpt">{post.excerpt}</p>
             <div className="post-tags">
               {post.tags.map((tag) => (
-                <span key={tag} className="tag">{tag}</span>
+                <span key={tag} className="tag">
+                  {tag}
+                </span>
               ))}
             </div>
-            <div className="post-read-more">
-              Read more →
-            </div>
+            <div className="post-read-more">Read more →</div>
           </article>
         ))}
       </div>

@@ -4,7 +4,7 @@ This blog uses individual markdown files for posts instead of maintaining all co
 
 ## Structure
 
-```
+```text
 content/
   posts/
     2024-12-01-launching-h3ow3d-blog.md
@@ -61,13 +61,13 @@ This updates `src/data/posts.js` with all posts from the `content/posts/` direct
 
 ## Frontmatter Fields
 
-| Field | Required | Description |
-|-------|----------|-------------|
-| `id` | Yes | Unique post ID (increment from last post) |
-| `date` | Yes | Post date in YYYY-MM-DD format |
-| `title` | Yes | Post title |
-| `excerpt` | Yes | Brief summary (1-2 sentences) |
-| `tags` | Yes | Array of tags for categorization |
+| Field     | Required | Description                               |
+| --------- | -------- | ----------------------------------------- |
+| `id`      | Yes      | Unique post ID (increment from last post) |
+| `date`    | Yes      | Post date in YYYY-MM-DD format            |
+| `title`   | Yes      | Post title                                |
+| `excerpt` | Yes      | Brief summary (1-2 sentences)             |
+| `tags`    | Yes      | Array of tags for categorization          |
 
 ## Build Process
 
@@ -121,6 +121,7 @@ git push
 ## Future Enhancements
 
 Possible additions to this system:
+
 - Draft posts (add `draft: true` to frontmatter)
 - Scheduled posts (filter by date)
 - Categories in addition to tags

@@ -1,13 +1,15 @@
 import { useEffect, useRef } from 'react'
 import './Comments.css'
 
-function Comments({ postId, postTitle }) {
+function Comments({ postId }) {
   const commentsRef = useRef(null)
 
   useEffect(() => {
+    const commentsContainer = commentsRef.current
+
     // Clear existing comments when post changes
-    if (commentsRef.current) {
-      commentsRef.current.innerHTML = ''
+    if (commentsContainer) {
+      commentsContainer.innerHTML = ''
     }
 
     // Create script element for Giscus
@@ -29,14 +31,14 @@ function Comments({ postId, postTitle }) {
     script.crossOrigin = 'anonymous'
     script.async = true
 
-    if (commentsRef.current) {
-      commentsRef.current.appendChild(script)
+    if (commentsContainer) {
+      commentsContainer.appendChild(script)
     }
 
     return () => {
       // Cleanup when component unmounts
-      if (commentsRef.current) {
-        commentsRef.current.innerHTML = ''
+      if (commentsContainer) {
+        commentsContainer.innerHTML = ''
       }
     }
   }, [postId])

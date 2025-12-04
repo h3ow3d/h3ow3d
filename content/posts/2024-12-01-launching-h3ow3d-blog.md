@@ -8,13 +8,12 @@ tags:
   - meta
 ---
 
-# Launching h3ow3d Blog
-
 Welcome to **h3ow3d** - my personal tech blog where I'll be sharing updates about my projects, lessons learned, and interesting technical challenges I encounter.
 
 ## Why h3ow3d?
 
 I've always loved the format of h3ow3d in software and games. They're:
+
 - **Clear and structured** - Easy to follow what changed
 - **Version-based** - Track progress over time
 - **Technical yet accessible** - Balance detail with readability
@@ -22,6 +21,7 @@ I've always loved the format of h3ow3d in software and games. They're:
 ## What to Expect
 
 I'll be posting about:
+
 - Web development projects
 - Cloud infrastructure experiments
 - DevOps learnings
@@ -31,6 +31,7 @@ I'll be posting about:
 ## Tech Stack
 
 This blog itself is built with:
+
 - **React** - For the UI
 - **Vite** - Lightning fast development
 - **AWS S3 + CloudFront** - Static hosting with global CDN

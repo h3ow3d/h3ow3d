@@ -1,5 +1,5 @@
 locals {
-  bucket_name = "${var.project_name}-${replace(lower(terraform.workspace), "/[^a-z0-9-]/", "-" )}"
+  bucket_name = "${var.project_name}-${replace(lower(terraform.workspace), "/[^a-z0-9-]/", "-")}"
 }
 
 # S3 bucket for static website hosting
@@ -28,7 +28,7 @@ resource "aws_s3_bucket_website_configuration" "site" {
   bucket = aws_s3_bucket.site.id
 
   index_document { suffix = "index.html" }
-  error_document { key    = "index.html" }
+  error_document { key = "index.html" }
 }
 
 # Bucket policy to allow public read to objects
@@ -80,9 +80,9 @@ resource "aws_cloudfront_distribution" "cdn" {
         forward = "none"
       }
     }
-    min_ttl                = 0
-    default_ttl            = 3600
-    max_ttl                = 86400
+    min_ttl     = 0
+    default_ttl = 3600
+    max_ttl     = 86400
   }
 
   price_class = "PriceClass_100"
@@ -94,8 +94,8 @@ resource "aws_cloudfront_distribution" "cdn" {
   }
 
   viewer_certificate {
-    acm_certificate_arn            = var.acm_certificate_arn != "" ? var.acm_certificate_arn : null
-    cloudfront_default_certificate = var.acm_certificate_arn == ""
+    acm_certificate_arn            = null
+    cloudfront_default_certificate = true
     minimum_protocol_version       = "TLSv1.2_2021"
   }
 

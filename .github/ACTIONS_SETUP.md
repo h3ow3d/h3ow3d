@@ -8,7 +8,7 @@ To enable automated deployments, you need to configure the following secrets in 
 
 ### Navigate to: `Settings` → `Secrets and variables` → `Actions` → `New repository secret`
 
-### Required Secrets:
+### Required Secrets
 
 1. **AWS_ACCESS_KEY_ID**
    - Your AWS access key ID
@@ -44,6 +44,7 @@ To enable automated deployments, you need to configure the following secrets in 
 ### Option 2: Use Existing AWS CLI Credentials
 
 If you already have AWS CLI configured locally:
+
 ```bash
 cat ~/.aws/credentials
 ```
@@ -60,23 +61,12 @@ Instead of using full access policies, create a custom policy with only the requ
   "Statement": [
     {
       "Effect": "Allow",
-      "Action": [
-        "s3:PutObject",
-        "s3:GetObject",
-        "s3:DeleteObject",
-        "s3:ListBucket"
-      ],
-      "Resource": [
-        "arn:aws:s3:::YOUR_BUCKET_NAME",
-        "arn:aws:s3:::YOUR_BUCKET_NAME/*"
-      ]
+      "Action": ["s3:PutObject", "s3:GetObject", "s3:DeleteObject", "s3:ListBucket"],
+      "Resource": ["arn:aws:s3:::YOUR_BUCKET_NAME", "arn:aws:s3:::YOUR_BUCKET_NAME/*"]
     },
     {
       "Effect": "Allow",
-      "Action": [
-        "cloudfront:CreateInvalidation",
-        "cloudfront:GetInvalidation"
-      ],
+      "Action": ["cloudfront:CreateInvalidation", "cloudfront:GetInvalidation"],
       "Resource": "arn:aws:cloudfront::YOUR_ACCOUNT_ID:distribution/YOUR_DISTRIBUTION_ID"
     }
   ]
@@ -86,6 +76,7 @@ Instead of using full access policies, create a custom policy with only the requ
 ## Workflow Triggers
 
 The deployment workflow runs automatically when:
+
 - Code is pushed to the `main` branch
 - Manually triggered via the Actions tab (using workflow_dispatch)
 
@@ -120,6 +111,7 @@ You can manually trigger a deployment:
 ## Terraform Integration
 
 If you're using Terraform to manage your infrastructure:
+
 - The workflow will automatically detect Terraform state
 - It will read the S3 bucket name and CloudFront distribution ID from Terraform outputs
 - No need to manually configure these as GitHub secrets
@@ -127,15 +119,18 @@ If you're using Terraform to manage your infrastructure:
 ## Troubleshooting
 
 ### Deployment fails with authentication error
+
 - Verify AWS credentials are correct in GitHub secrets
 - Check IAM user has necessary permissions
 
 ### S3 sync fails
+
 - Verify S3_BUCKET secret is set correctly
 - Check bucket exists and is accessible
 - Ensure IAM user has S3 permissions
 
 ### CloudFront invalidation fails
+
 - Verify CLOUDFRONT_DISTRIBUTION_ID is correct
 - Check IAM user has CloudFront permissions
 - This step is optional and won't fail the deployment
@@ -143,11 +138,13 @@ If you're using Terraform to manage your infrastructure:
 ## Local Testing
 
 You can still deploy locally using the Makefile:
+
 ```bash
 make deploy
 ```
 
 Or with npm:
+
 ```bash
 npm run deploy
 ```

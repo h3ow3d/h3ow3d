@@ -19,23 +19,23 @@ runs:
       uses: hashicorp/setup-terraform@v3
       with:
         terraform_wrapper: false
-    
+
     - name: Get Terraform outputs
       id: get-outputs
       shell: bash
       run: |
         cd infra/terraform
-        
+
         echo "🔧 Initializing Terraform..."
         terraform init
-        
+
         echo "📊 Getting Terraform outputs..."
-        
+
         # Get bucket, distribution ID, and CloudFront domain
         S3_BUCKET=$(terraform output -raw s3_bucket_name 2>/dev/null || echo "")
         CLOUDFRONT_ID=$(terraform output -raw cloudfront_distribution_id 2>/dev/null || echo "")
         CLOUDFRONT_DOMAIN=$(terraform output -raw cloudfront_domain_name 2>/dev/null || echo "")
-        
+
         # Output S3 bucket
         if [ -n "$S3_BUCKET" ]; then
           echo "✅ Found S3 bucket: $S3_BUCKET"
@@ -43,7 +43,7 @@ runs:
         else
           echo "⚠️  No S3 bucket found in Terraform outputs"
         fi
-        
+
         # Output CloudFront distribution ID
         if [ -n "$CLOUDFRONT_ID" ]; then
           echo "✅ Found CloudFront distribution: $CLOUDFRONT_ID"
@@ -51,7 +51,7 @@ runs:
         else
           echo "⚠️  No CloudFront distribution found in Terraform outputs"
         fi
-        
+
         # Output CloudFront domain
         if [ -n "$CLOUDFRONT_DOMAIN" ]; then
           echo "✅ Found CloudFront domain: $CLOUDFRONT_DOMAIN"

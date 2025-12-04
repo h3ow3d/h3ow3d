@@ -9,13 +9,12 @@ tags:
   - backend
 ---
 
-# Building a Serverless API with AWS Lambda
-
 Recently, I built a serverless REST API for a side project. Here's what I learned about AWS Lambda and serverless architecture.
 
 ## Architecture Overview
 
 The stack consists of:
+
 - **API Gateway** - HTTP endpoints
 - **Lambda Functions** - Business logic
 - **DynamoDB** - NoSQL database
@@ -24,28 +23,33 @@ The stack consists of:
 ## Key Learnings
 
 ### Cold Starts
+
 Cold starts are real, but not as bad as I thought:
+
 - Kept functions under 10MB
 - Used provisioned concurrency for critical endpoints
 - Average cold start: ~800ms
 
 ### Cost Optimization
+
 Serverless doesn't always mean cheaper:
+
 - Pay per request model works great for sporadic traffic
 - DynamoDB on-demand pricing saved 60% vs provisioned
 - CloudWatch logs can add up - implement retention policies
 
 ### Development Tips
+
 ```javascript
 // Use environment variables
-const TABLE_NAME = process.env.TABLE_NAME;
+const TABLE_NAME = process.env.TABLE_NAME
 
 // Reuse connections outside handler
-const dynamodb = new AWS.DynamoDB.DocumentClient();
+const dynamodb = new AWS.DynamoDB.DocumentClient()
 
 export const handler = async (event) => {
   // Handler code here
-};
+}
 ```
 
 ## Results
