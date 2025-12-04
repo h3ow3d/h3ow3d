@@ -1,15 +1,34 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './Header.css'
 
+// Random command-line style variations
+const logoVariations = [
+  { prefix: 'less ', suffix: '.md' },
+  { prefix: 'cat ', suffix: '.txt' },
+  { prefix: 'tail ', suffix: '.log' },
+  { prefix: "git commit -m '", suffix: "'" },
+  { prefix: 'vim ', suffix: '.sh' },
+  { prefix: 'nano ', suffix: '.js' },
+  { prefix: 'grep ', suffix: ' -r .' },
+  { prefix: 'echo ', suffix: '' },
+  { prefix: 'cd ', suffix: '/' },
+  { prefix: 'man ', suffix: '' },
+]
+
 function Header({ theme, onToggleTheme }) {
+  const [logoStyle] = useState(() => {
+    // Pick a random variation on component mount
+    return logoVariations[Math.floor(Math.random() * logoVariations.length)]
+  })
+
   return (
     <header className="header">
       <div className="header-content">
         <div className="header-main">
           <h1 className="logo">
-            <span className="logo-bracket">{'<'}</span>
-            h3ow3d
-            <span className="logo-bracket">{'/>'}</span>
+            <span className="logo-command">{logoStyle.prefix}</span>
+            <span className="logo-name">h3ow3d</span>
+            <span className="logo-command">{logoStyle.suffix}</span>
           </h1>
           <div className="header-actions">
             <button

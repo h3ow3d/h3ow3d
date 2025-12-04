@@ -26,6 +26,16 @@
   font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace;
 }
 
+.logo-command {
+  color: var(--primary);
+  font-weight: 400;
+}
+
+.logo-name {
+  color: var(--text);
+  font-weight: 700;
+}
+
 .logo-bracket {
   color: var(--primary);
   margin: 0 0.5rem;
