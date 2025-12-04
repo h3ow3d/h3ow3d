@@ -67,11 +67,11 @@ function generateRSS(posts) {
     const postUrl = `${SITE_URL}#post-${post.id}`;
     const pubDate = toRFC822Date(post.date);
     
-    // Create a description from the content
-    let description = post.content;
-    if (typeof description === 'string') {
-      // Remove markdown syntax and limit length
-      description = description
+    // Use excerpt as description, fallback to truncated content
+    let description = post.excerpt || '';
+    if (!description && post.content) {
+      // Fallback: create description from content if no excerpt
+      description = post.content
         .replace(/#{1,6}\s/g, '') // Remove headers
         .replace(/\*\*/g, '') // Remove bold
         .replace(/\*/g, '') // Remove italic
@@ -81,8 +81,6 @@ function generateRSS(posts) {
       if (post.content.length > 500) {
         description += '...';
       }
-    } else {
-      description = 'Read more...';
     }
 
     rss += `
