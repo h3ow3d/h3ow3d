@@ -1,0 +1,35 @@
+name: 'Invalidate CloudFront Cache'
+description: 'Create a CloudFront cache invalidation'
+
+inputs:
+  cloudfront_distribution_id:
+    description: 'CloudFront distribution ID'
+    required: false
+  paths:
+    description: 'Paths to invalidate'
+    required: false
+    default: '/*'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Invalidate CloudFront cache
+      shell: bash
+      run: |
+        CLOUDFRONT_ID="${{ inputs.cloudfront_distribution_id }}"
+        
+        if [ -z "$CLOUDFRONT_ID" ]; then
+          echo "Warning: CloudFront distribution ID not configured. Skipping cache invalidation."
+          exit 0
+        fi
+        
+        echo "Creating CloudFront invalidation for distribution: $CLOUDFRONT_ID"
+        
+        INVALIDATION_ID=$(aws cloudfront create-invalidation \
+          --distribution-id $CLOUDFRONT_ID \
+          --paths "${{ inputs.paths }}" \
+          --query 'Invalidation.Id' \
+          --output text)
+        
+        echo "CloudFront invalidation created: $INVALIDATION_ID"
+        echo "Note: It may take several minutes for the invalidation to complete."

@@ -42,84 +42,23 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
       
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_wrapper: false
-      
-      - name: Get Terraform outputs
+      - name: Setup Terraform and get outputs
         id: terraform
-        run: |
-          cd infra/terraform
-          
-          echo "Initializing Terraform..."
-          terraform init -backend=false
-          
-          echo "Getting Terraform outputs..."
-          S3_BUCKET=$(terraform output -raw s3_bucket_name 2>/dev/null || echo "")
-          CLOUDFRONT_ID=$(terraform output -raw cloudfront_distribution_id 2>/dev/null || echo "")
-          
-          if [ -n "$S3_BUCKET" ]; then
-            echo "Found S3 bucket: $S3_BUCKET"
-            echo "s3_bucket=$S3_BUCKET" >> $GITHUB_OUTPUT
-          else
-            echo "No S3 bucket found in Terraform outputs"
-          fi
-          
-          if [ -n "$CLOUDFRONT_ID" ]; then
-            echo "Found CloudFront distribution: $CLOUDFRONT_ID"
-            echo "cloudfront_id=$CLOUDFRONT_ID" >> $GITHUB_OUTPUT
-          else
-            echo "No CloudFront distribution found in Terraform outputs"
-          fi
+        uses: ./.github/actions/setup-terraform
         continue-on-error: true
       
       - name: Deploy to S3
-        run: |
-          S3_BUCKET="${{ steps.terraform.outputs.s3_bucket || secrets.S3_BUCKET }}"
-          
-          if [ -z "$S3_BUCKET" ]; then
-            echo "Error: S3_BUCKET not configured. Set it in repository secrets or use Terraform."
-            exit 1
-          fi
-          
-          echo "Syncing to S3 bucket: $S3_BUCKET"
-          
-          # Sync all files except index.html with long cache
-          aws s3 sync dist/ s3://$S3_BUCKET \
-            --delete \
-            --region ${{ env.AWS_REGION }} \
-            --cache-control "public, max-age=31536000" \
-            --exclude "index.html" \
-            --exclude "*.map"
-          
-          # Upload index.html with no-cache
-          aws s3 cp dist/index.html s3://$S3_BUCKET/index.html \
-            --region ${{ env.AWS_REGION }} \
-            --cache-control "no-cache, no-store, must-revalidate" \
-            --metadata-directive REPLACE
-          
-          echo "Successfully deployed to S3!"
+        uses: ./.github/actions/deploy-to-s3
+        with:
+          s3_bucket: ${{ steps.terraform.outputs.s3_bucket || secrets.S3_BUCKET }}
+          aws_region: ${{ env.AWS_REGION }}
+          dist_dir: dist
       
       - name: Invalidate CloudFront cache
-        run: |
-          CLOUDFRONT_ID="${{ steps.terraform.outputs.cloudfront_id || secrets.CLOUDFRONT_DISTRIBUTION_ID }}"
-          
-          if [ -z "$CLOUDFRONT_ID" ]; then
-            echo "Warning: CloudFront distribution ID not configured. Skipping cache invalidation."
-            exit 0
-          fi
-          
-          echo "Creating CloudFront invalidation for distribution: $CLOUDFRONT_ID"
-          
-          INVALIDATION_ID=$(aws cloudfront create-invalidation \
-            --distribution-id $CLOUDFRONT_ID \
-            --paths "/*" \
-            --query 'Invalidation.Id' \
-            --output text)
-          
-          echo "CloudFront invalidation created: $INVALIDATION_ID"
-          echo "Note: It may take several minutes for the invalidation to complete."
+        uses: ./.github/actions/invalidate-cloudfront
+        with:
+          cloudfront_distribution_id: ${{ steps.terraform.outputs.cloudfront_id || secrets.CLOUDFRONT_DISTRIBUTION_ID }}
+          paths: '/*'
       
       - name: Deployment summary
         run: |

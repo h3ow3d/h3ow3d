@@ -1,0 +1,45 @@
+name: 'Setup Terraform and Get Outputs'
+description: 'Initialize Terraform and read outputs for S3 bucket and CloudFront distribution'
+
+outputs:
+  s3_bucket:
+    description: 'S3 bucket name from Terraform outputs'
+    value: ${{ steps.get-outputs.outputs.s3_bucket }}
+  cloudfront_id:
+    description: 'CloudFront distribution ID from Terraform outputs'
+    value: ${{ steps.get-outputs.outputs.cloudfront_id }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_wrapper: false
+    
+    - name: Get Terraform outputs
+      id: get-outputs
+      shell: bash
+      run: |
+        cd infra/terraform
+        
+        echo "Initializing Terraform..."
+        terraform init -backend=false
+        
+        echo "Getting Terraform outputs..."
+        S3_BUCKET=$(terraform output -raw s3_bucket_name 2>/dev/null || echo "")
+        CLOUDFRONT_ID=$(terraform output -raw cloudfront_distribution_id 2>/dev/null || echo "")
+        
+        if [ -n "$S3_BUCKET" ]; then
+          echo "Found S3 bucket: $S3_BUCKET"
+          echo "s3_bucket=$S3_BUCKET" >> $GITHUB_OUTPUT
+        else
+          echo "No S3 bucket found in Terraform outputs"
+        fi
+        
+        if [ -n "$CLOUDFRONT_ID" ]; then
+          echo "Found CloudFront distribution: $CLOUDFRONT_ID"
+          echo "cloudfront_id=$CLOUDFRONT_ID" >> $GITHUB_OUTPUT
+        else
+          echo "No CloudFront distribution found in Terraform outputs"
+        fi
