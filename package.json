@@ -1,7 +1,7 @@
 {
   "name": "h3ow3d",
   "version": "1.0.0",
-  "description": "A tech blog for project updates and patch notes",
+  "description": "A tech blog for project updates and h3ow3d",
   "type": "module",
   "scripts": {
     "dev": "vite",

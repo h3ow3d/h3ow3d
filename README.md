@@ -13,7 +13,9 @@ A modern, single-page tech blog by h3ow3d, built with React and deployed on AWS.
 - **Responsive Design** - Looks great on desktop, tablet, and mobile
 - **Version-Based Posts** - Each post has a version tag for tracking updates
 - **AWS Hosted** - Static hosting on S3 with CloudFront CDN
-- **Dark Theme** - Easy on the eyes with a modern dark UI
+- **Light/Dark Theme** - Toggle between light and dark modes
+- **RSS Feed** - Automatically generated RSS feed for subscribers
+- **Comment System** - GitHub Discussions-powered comments via Giscus
 - **Fast & Lightweight** - Optimized build with Vite
 
 ## 🛠️ Tech Stack
@@ -92,7 +94,6 @@ Set in `src/components/Header.jsx`:
 
 ```javascript
 <h1 className="logo">h3ow3d</h1>
-<p className="tagline">Patch Notes • Tech Projects & Development Stories</p>
 ```
 
 ## 📦 Building for Production
@@ -165,6 +166,10 @@ Some ideas for future enhancements:
 - [ ] Share buttons
 - [x] Comments system
 - [ ] Analytics integration
+
+## 💬 Comments Setup
+
+Comments powered by Giscus (GitHub Discussions). See `COMMENTS_SETUP.md` for setup instructions.
 
 ## 📄 License
 

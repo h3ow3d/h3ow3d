@@ -45,7 +45,7 @@ function Header({ theme, onToggleTheme }) {
             </a>
           </div>
         </div>
-        <p className="tagline">Patch Notes • Tech Projects & Development Stories</p>
+        <p className="tagline">Tech Projects & Development Stories</p>
       </div>
     </header>
   )

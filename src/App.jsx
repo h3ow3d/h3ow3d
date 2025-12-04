@@ -43,7 +43,7 @@ function App() {
         )}
       </main>
       <footer className="footer">
-        <p>© {new Date().getFullYear()} Patch Notes. Built with React & hosted on AWS.</p>
+        <p>© {new Date().getFullYear()} h3ow3d. Built with React & hosted on AWS.</p>
       </footer>
     </div>
   )

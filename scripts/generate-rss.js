@@ -21,8 +21,8 @@ const posts = eval(postsMatch[1]);
 
 // Configuration
 const SITE_URL = process.env.SITE_URL || process.env.VITE_SITE_URL || 'http://localhost:5173';
-const SITE_TITLE = 'h3ow3d - Patch Notes';
-const SITE_DESCRIPTION = 'A tech blog for project updates and patch notes';
+const SITE_TITLE = 'h3ow3d';
+const SITE_DESCRIPTION = 'A tech blog for project updates';
 const AUTHOR_EMAIL = 'hello@h3ow3d.com';
 const AUTHOR_NAME = 'h3ow3d';
 

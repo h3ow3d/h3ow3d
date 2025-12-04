@@ -1,6 +1,6 @@
-# AWS Deployment Guide for Patch Notes
+# AWS Deployment Guide for h3ow3d
 
-This guide will help you deploy your Patch Notes blog to AWS using S3 and CloudFront.
+This guide will help you deploy your h3ow3d blog to AWS using S3 and CloudFront.
 
 ## Prerequisites
 

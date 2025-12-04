@@ -3,16 +3,16 @@ export const posts = [
     id: 1,
     version: 'v1.0.0',
     date: '2024-12-01',
-    title: 'Launching Patch Notes Blog',
-    excerpt: 'Welcome to Patch Notes! A new way to share my tech project updates and development journey.',
+    title: 'Launching h3ow3d Blog',
+    excerpt: 'Welcome to h3ow3d! A new way to share my tech project updates and development journey.',
     tags: ['announcement', 'meta'],
-    content: `# Launching Patch Notes Blog
+    content: `# Launching h3ow3d Blog
 
-Welcome to **Patch Notes** - my personal tech blog where I'll be sharing updates about my projects, lessons learned, and interesting technical challenges I encounter.
+Welcome to **h3ow3d** - my personal tech blog where I'll be sharing updates about my projects, lessons learned, and interesting technical challenges I encounter.
 
-## Why Patch Notes?
+## Why h3ow3d?
 
-I've always loved the format of patch notes in software and games. They're:
+I've always loved the format of h3ow3d in software and games. They're:
 - **Clear and structured** - Easy to follow what changed
 - **Version-based** - Track progress over time
 - **Technical yet accessible** - Balance detail with readability
