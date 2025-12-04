@@ -8,7 +8,39 @@ This guide will help you deploy your Patch Notes blog to AWS using S3 and CloudF
 - AWS CLI installed and configured
 - Domain name (optional, but recommended)
 
-## Step 1: Create S3 Bucket
+## Option A: One-command IaC deploy (Terraform)
+
+Infra code is provided in `infra/terraform/` to create:
+- S3 bucket with static website hosting (SPA: index.html for 404s)
+- CloudFront distribution in front of S3 (always enabled)
+
+### Prereqs
+- Terraform 1.5+
+- AWS CLI configured
+
+### Usage
+```bash
+cd infra/terraform
+terraform init
+terraform plan -var="project_name=patch-notes" -var="aws_region=us-east-1"
+terraform apply -auto-approve -var="project_name=patch-notes" -var="aws_region=us-east-1"
+```
+
+Outputs will include:
+- `s3_website_endpoint` — the public website URL
+- `cloudfront_domain_name` — CDN URL (if enabled)
+
+Customize via variables in `variables.tf`:
+- `domain_name` and `acm_certificate_arn` if you want a custom domain
+
+To destroy:
+```bash
+terraform destroy -auto-approve
+```
+
+## Option B: Manual via AWS CLI
+
+### Step 1: Create S3 Bucket
 
 ```bash
 # Create bucket (replace YOUR_BUCKET_NAME with your unique name)

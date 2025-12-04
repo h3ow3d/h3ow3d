@@ -7,10 +7,10 @@ function Header() {
       <div className="header-content">
         <h1 className="logo">
           <span className="logo-bracket">{'<'}</span>
-          Patch Notes
+          h3ow3d
           <span className="logo-bracket">{'/>'}</span>
         </h1>
-        <p className="tagline">Tech Projects & Development Stories</p>
+        <p className="tagline">Patch Notes • Tech Projects & Development Stories</p>
       </div>
     </header>
   )

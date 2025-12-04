@@ -1,6 +1,6 @@
-# Patch Notes 🚀
+# h3ow3d 🚀
 
-A modern, single-page tech blog built with React and deployed on AWS. Perfect for sharing project updates, technical articles, and development stories in a clean, developer-focused format.
+A modern, single-page tech blog by h3ow3d, built with React and deployed on AWS. Perfect for sharing project updates, technical articles, and development stories in a clean, developer-focused format.
 
 ![Version](https://img.shields.io/badge/version-1.0.0-blue)
 ![React](https://img.shields.io/badge/react-18.2.0-61dafb)
@@ -88,11 +88,11 @@ Edit CSS variables in `src/index.css`:
 
 ### Site Title & Tagline
 
-Update in `src/components/Header.jsx`:
+Set in `src/components/Header.jsx`:
 
 ```javascript
-<h1 className="logo">Your Blog Name</h1>
-<p className="tagline">Your tagline here</p>
+<h1 className="logo">h3ow3d</h1>
+<p className="tagline">Patch Notes • Tech Projects & Development Stories</p>
 ```
 
 ## 📦 Building for Production
@@ -176,7 +176,7 @@ Contributions, issues, and feature requests are welcome!
 
 ## 👤 Author
 
-Your Name - [Your Website](https://yourwebsite.com)
+h3ow3d - [Your Website](https://yourwebsite.com)
 
 ---
 
