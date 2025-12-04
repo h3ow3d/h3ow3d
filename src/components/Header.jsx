@@ -6,6 +6,7 @@ const logoVariations = [
   { prefix: 'less ', suffix: '.md' },
   { prefix: 'cat ', suffix: '.txt' },
   { prefix: 'tail ', suffix: '.log' },
+  { prefix: 'bash -c ./', suffix: '.sh' },
   { prefix: "git commit -m '", suffix: "'" },
   { prefix: 'vi ', suffix: '.py' },
   { prefix: 'find ./ -type f -name "', suffix: '"' },
