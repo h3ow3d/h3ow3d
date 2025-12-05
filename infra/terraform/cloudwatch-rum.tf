@@ -1,7 +1,7 @@
 # CloudWatch RUM App Monitor
 resource "aws_rum_app_monitor" "h3ow3d" {
   name   = "h3ow3d-monitor"
-  domain = "h3ow3d.com"
+  domain = aws_cloudfront_distribution.cdn.domain_name
 
   app_monitor_configuration {
     allow_cookies       = true
