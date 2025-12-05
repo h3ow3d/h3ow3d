@@ -1,6 +1,7 @@
 import React from 'react'
 import { format } from 'date-fns'
 import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import Comments from './Comments'
 import './BlogPost.css'
 
@@ -27,7 +28,7 @@ function BlogPost({ post, onBack }) {
         </header>
 
         <div className="post-body">
-          <ReactMarkdown>{post.content}</ReactMarkdown>
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
         </div>
 
         <Comments postId={post.id} postTitle={post.title} />
