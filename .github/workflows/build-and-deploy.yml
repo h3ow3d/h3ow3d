@@ -77,54 +77,15 @@ jobs:
           echo "✅ Configuration loaded from Terraform:"
           echo "  S3 Bucket: $S3_BUCKET"
           echo "  CloudFront Distribution: ${CLOUDFRONT_ID:-not configured}"
-          echo "  CloudFront Domain: ${CLOUDFRONT_DOMAIN:-not configured}"
 
-      - name: Build application
-        env:
-          VITE_SITE_URL: ${{ steps.config.outputs.site_url }}
-          VITE_APP_VERSION: ${{ github.sha }}
-          VITE_AWS_REGION: ${{ env.AWS_REGION }}
-          VITE_AWS_RUM_APP_ID: ${{ steps.terraform.outputs.rum_app_monitor_id }}
-          VITE_AWS_RUM_IDENTITY_POOL_ID: ${{ steps.terraform.outputs.rum_identity_pool_id }}
-          VITE_AWS_RUM_GUEST_ROLE_ARN: ${{ steps.terraform.outputs.rum_guest_role_arn }}
-        run: npm run build
-
-      - name: Archive source maps to private S3
-        run: |
-          SOURCEMAPS_BUCKET="${{ steps.terraform.outputs.sourcemaps_bucket_name }}"
-          VERSION="${{ github.sha }}"
-
-          if [ -n "$SOURCEMAPS_BUCKET" ]; then
-            echo "📦 Uploading source maps to s3://$SOURCEMAPS_BUCKET/$VERSION/"
-
-            # Upload all .js.map files to private bucket
-            find dist/assets -name "*.js.map" -type f | while read map_file; do
-              filename=$(basename "$map_file")
-              aws s3 cp "$map_file" \
-                "s3://$SOURCEMAPS_BUCKET/$VERSION/$filename" \
-                --metadata "version=$VERSION,commit=${{ github.sha }},branch=${{ github.ref_name }}"
-              echo "  ✓ Uploaded $filename"
-            done
-
-            echo "✅ Source maps uploaded successfully"
-          else
-            echo "⚠️  Source maps bucket not configured, skipping upload"
-          fi
-
-      - name: Strip source maps from public bundle
-        run: |
-          echo "🗑️  Removing source maps from dist/ before public deployment"
-          find dist -name "*.js.map" -type f -delete
-          echo "✅ Source maps removed from public bundle"
-
-      - name: Sync build artifacts to S3
+      - name: Deploy to S3
         uses: ./.github/actions/deploy-to-s3
         with:
           s3_bucket: ${{ steps.config.outputs.s3_bucket }}
           aws_region: ${{ env.AWS_REGION }}
           dist_dir: dist
 
-      - name: Refresh CloudFront distribution
+      - name: Invalidate CloudFront cache
         uses: ./.github/actions/invalidate-cloudfront
         with:
           cloudfront_distribution_id: ${{ steps.config.outputs.cloudfront_id }}
@@ -138,8 +99,6 @@ jobs:
           echo "- **S3 Bucket**: \`${{ steps.config.outputs.s3_bucket }}\`" >> $GITHUB_STEP_SUMMARY
           echo "- **CloudFront Distribution**: \`${{ steps.config.outputs.cloudfront_id || 'Not configured' }}\`" >> $GITHUB_STEP_SUMMARY
           echo "- **AWS Region**: \`${{ env.AWS_REGION }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- **Source Maps Bucket**: \`${{ steps.terraform.outputs.sourcemaps_bucket_name || 'Not configured' }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- **RUM App Monitor**: \`${{ steps.terraform.outputs.rum_app_monitor_id || 'Not configured' }}\`" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Deployment Info" >> $GITHUB_STEP_SUMMARY
           echo "- **Commit**: \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
