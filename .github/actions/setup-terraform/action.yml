@@ -1,5 +1,5 @@
-name: 'Setup Terraform and Get Outputs'
-description: 'Initialize Terraform and read outputs for S3 bucket and CloudFront distribution'
+name: 'Apply Terraform and Export Outputs'
+description: 'Applies Terraform infrastructure changes and exports configuration outputs'
 
 outputs:
   s3_bucket:
@@ -27,12 +27,12 @@ outputs:
 runs:
   using: 'composite'
   steps:
-    - name: Setup Terraform
+    - name: Initialize Terraform
       uses: hashicorp/setup-terraform@v3
       with:
         terraform_wrapper: false
 
-    - name: Get Terraform outputs
+    - name: Apply infrastructure changes and export outputs
       id: get-outputs
       shell: bash
       run: |

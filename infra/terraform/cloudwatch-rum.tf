@@ -25,6 +25,7 @@ resource "aws_rum_app_monitor" "h3ow3d" {
 resource "aws_cognito_identity_pool" "rum" {
   identity_pool_name               = "h3ow3d_rum_pool"
   allow_unauthenticated_identities = true
+  allow_classic_flow               = true
 
   tags = {
     Name        = "h3ow3d-rum-identity-pool"

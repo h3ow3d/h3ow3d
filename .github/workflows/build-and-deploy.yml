@@ -43,11 +43,11 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Setup Terraform and get outputs
+      - name: Apply Terraform infrastructure changes
         id: terraform
         uses: ./.github/actions/setup-terraform
 
-      - name: Determine S3 bucket and CloudFront distribution
+      - name: Extract deployment configuration
         id: config
         run: |
           S3_BUCKET="${{ steps.terraform.outputs.s3_bucket }}"
@@ -89,7 +89,7 @@ jobs:
           VITE_AWS_RUM_GUEST_ROLE_ARN: ${{ steps.terraform.outputs.rum_guest_role_arn }}
         run: npm run build
 
-      - name: Upload source maps to S3
+      - name: Archive source maps to private S3
         run: |
           SOURCEMAPS_BUCKET="${{ steps.terraform.outputs.sourcemaps_bucket_name }}"
           VERSION="${{ github.sha }}"
@@ -111,20 +111,20 @@ jobs:
             echo "⚠️  Source maps bucket not configured, skipping upload"
           fi
 
-      - name: Remove source maps from public deployment
+      - name: Strip source maps from public bundle
         run: |
           echo "🗑️  Removing source maps from dist/ before public deployment"
           find dist -name "*.js.map" -type f -delete
           echo "✅ Source maps removed from public bundle"
 
-      - name: Deploy to S3
+      - name: Sync build artifacts to S3
         uses: ./.github/actions/deploy-to-s3
         with:
           s3_bucket: ${{ steps.config.outputs.s3_bucket }}
           aws_region: ${{ env.AWS_REGION }}
           dist_dir: dist
 
-      - name: Invalidate CloudFront cache
+      - name: Refresh CloudFront distribution
         uses: ./.github/actions/invalidate-cloudfront
         with:
           cloudfront_distribution_id: ${{ steps.config.outputs.cloudfront_id }}
