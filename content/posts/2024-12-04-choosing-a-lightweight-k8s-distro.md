@@ -22,7 +22,13 @@ A straightforward local Kubernetes cluster that stays close to upstream behaviou
 
 ### How it works
 
-Install the Minikube CLI and run `minikube start`. It creates a node using either a VM driver or a container runtime. Add-ons such as Ingress, storage, and metrics can be enabled when needed.
+- Runs Kubernetes inside either a VM or a container, depending on the selected driver.
+
+- VM drivers boot a small Linux image that runs kubelet, containerd, and control plane components.
+
+- Container drivers run the entire node as a single privileged container, with Kubernetes processes inside it.
+
+- Networking and storage implementation vary by driver, so behaviour differs slightly between VM-backed and container-backed setups.
 
 ### Why use it
 
@@ -40,7 +46,13 @@ A Kubernetes cluster built entirely from containers using Docker or Podman. Desi
 
 ### How it works
 
-Install the kind binary and run `kind create cluster`. Each node runs as a container. Networking is handled by the container runtime. Multi-node layouts can be defined in a small YAML file.
+- Runs Kubernetes nodes as containers using the host container runtime (Docker, Podman, or containerd via nerdctl).
+
+- Each node container includes kubelet and the control plane components, without a full OS or systemd.
+
+- Uses the container runtime’s internal network for all cluster communication.
+
+- No VM layer, which keeps cluster creation, teardown, and scaling very fast.
 
 ### Why use it
 
@@ -58,7 +70,13 @@ A lightweight Kubernetes environment based on k3s, running inside Docker contain
 
 ### How it works
 
-Install the k3d CLI and run `k3d cluster create`. Each node is a container running the k3s distribution. Clusters start quickly and use very little CPU or memory.
+- Runs k3s nodes as containers on Docker.
+
+- k3s bundles core Kubernetes components into a single binary, so each node container runs fewer processes.
+
+- Relies on Docker networks and volumes for cluster networking and storage.
+
+- Behaves like lightweight Kubernetes due to k3s replacing some upstream components with simplified equivalents.
 
 ### Why use it
 
@@ -76,7 +94,13 @@ A compact Kubernetes distribution from Canonical designed for desktops, servers,
 
 ### How it works
 
-Installed as a snap package on Linux. On macOS and Windows it runs inside a managed VM. Add-ons provide DNS, storage, Ingress, and observability tools. It supports joining multiple nodes.
+- On Linux, installs as a snap and runs Kubernetes services (kubelet, containerd, control plane) in an isolated environment.
+
+- Functions like a compact production distribution rather than a container-based cluster.
+
+- On macOS and Windows, runs inside a managed VM with the same components on a minimal OS image.
+
+- Uses CNI, containerd, and storage mechanisms similar to a real multi-node deployment.
 
 ### Why use it
 
