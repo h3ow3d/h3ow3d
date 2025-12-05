@@ -46,7 +46,6 @@ jobs:
       - name: Setup Terraform and get outputs
         id: terraform
         uses: ./.github/actions/setup-terraform
-        continue-on-error: true
 
       - name: Determine S3 bucket and CloudFront distribution
         id: config

@@ -41,7 +41,13 @@ runs:
         echo "🔧 Initializing Terraform..."
         terraform init
 
-        echo "📊 Getting Terraform outputs..."
+        echo "� Planning Terraform changes..."
+        terraform plan -out=tfplan
+
+        echo "🚀 Applying Terraform changes..."
+        terraform apply -auto-approve tfplan
+
+        echo "�📊 Getting Terraform outputs..."
 
         # Get bucket, distribution ID, and CloudFront domain
         S3_BUCKET=$(terraform output -raw s3_bucket_name 2>/dev/null || echo "")
