@@ -87,9 +87,10 @@ resource "aws_iam_role_policy" "rum_guest_policy" {
           "rum:GetAppMonitor",
           "rum:GetAppMonitorData",
           "rum:ListRumMetricsDestinations",
-          "rum:PutRumMetricsDestination"
+          "rum:PutRumMetricsDestination",
+          "rum:UpdateRumMetricDefinition"
         ]
-        Resource = aws_rum_app_monitor.h3ow3d.arn
+        Resource = "*"
       }
     ]
   })
