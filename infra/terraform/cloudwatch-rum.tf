@@ -8,6 +8,9 @@ resource "aws_rum_app_monitor" "h3ow3d" {
     enable_xray         = false
     session_sample_rate = 1.0
     telemetries         = ["errors", "performance", "http"]
+
+    identity_pool_id = aws_cognito_identity_pool.rum.id
+    guest_role_arn   = aws_iam_role.rum_guest.arn
   }
 
   custom_events {
