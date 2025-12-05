@@ -46,7 +46,6 @@ repos:
     hooks:
       - id: markdownlint
         args: ['--fix']
-        exclude: ^(infra/terraform/README\.md|src/data/posts\.js)$
 
   # Terraform formatting and validation
   - repo: https://github.com/antonbabenko/pre-commit-terraform
