@@ -71,13 +71,27 @@ resource "aws_iam_role_policy" "rum_guest_policy" {
 
   policy = jsonencode({
     Version = "2012-10-17"
-    Statement = [{
-      Effect = "Allow"
-      Action = [
-        "rum:PutRumEvents"
-      ]
-      Resource = aws_rum_app_monitor.h3ow3d.arn
-    }]
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "rum:PutRumEvents"
+        ]
+        Resource = aws_rum_app_monitor.h3ow3d.arn
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "rum:BatchCreateRumMetricDefinitions",
+          "rum:BatchDeleteRumMetricDefinitions",
+          "rum:GetAppMonitor",
+          "rum:GetAppMonitorData",
+          "rum:ListRumMetricsDestinations",
+          "rum:PutRumMetricsDestination"
+        ]
+        Resource = aws_rum_app_monitor.h3ow3d.arn
+      }
+    ]
   })
 }
 
