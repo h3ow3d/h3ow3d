@@ -1,14 +1,14 @@
 ---
 id: 1
 date: 2025-12-04
-title: Lightweight K8s distros for local labs
+title: Choosing a lightweight k8s distros for local labs
 excerpt: How to choose the right lightweight Kubernetes distribution for your local development lab.
 tags:
   - kubernetes
   - devops
 ---
 
-# Running Kubernetes on a Single Machine: The Options That Actually Matter
+# Running Kubernetes on a Single Machine
 
 If you want a Kubernetes environment on one machine for learning, development, or lab work, these are the tools that are worth using. They differ in how they run Kubernetes, how realistic the environment is, and how fast they are to create or reset.
 
