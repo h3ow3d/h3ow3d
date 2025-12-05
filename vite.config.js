@@ -7,5 +7,6 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
+    sourcemap: 'hidden', // Generate source maps but don't reference them in JS files
   },
 })

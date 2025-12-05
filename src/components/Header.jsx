@@ -17,7 +17,7 @@ const logoVariations = [
   { prefix: 'kubectl apply -f ', suffix: '.yaml' },
 ]
 
-function Header({ theme, onToggleTheme }) {
+function Header({ theme, onToggleTheme, onShowDemo }) {
   const [logoStyle] = useState(() => {
     // Pick a random variation on component mount
     return logoVariations[Math.floor(Math.random() * logoVariations.length)]
@@ -33,6 +33,9 @@ function Header({ theme, onToggleTheme }) {
             <span className="logo-command">{logoStyle.suffix}</span>
           </h1>
           <div className="header-actions">
+            <button onClick={onShowDemo} className="demo-link" title="Source Map Demo">
+              🐛
+            </button>
             <button
               onClick={onToggleTheme}
               className="theme-toggle"

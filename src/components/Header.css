@@ -48,6 +48,24 @@
   margin-top: -0.5rem;
 }
 
+.demo-link {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
+  border-radius: 0.5rem;
+}
+
+.demo-link:hover {
+  transform: scale(1.1);
+  background-color: var(--surface-light);
+}
+
 .theme-toggle {
   color: var(--primary);
   background: transparent;

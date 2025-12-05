@@ -11,6 +11,18 @@ outputs:
   cloudfront_domain:
     description: 'CloudFront domain name from Terraform outputs'
     value: ${{ steps.get-outputs.outputs.cloudfront_domain }}
+  rum_app_monitor_id:
+    description: 'CloudWatch RUM app monitor ID'
+    value: ${{ steps.get-outputs.outputs.rum_app_monitor_id }}
+  rum_identity_pool_id:
+    description: 'Cognito identity pool ID for RUM'
+    value: ${{ steps.get-outputs.outputs.rum_identity_pool_id }}
+  rum_guest_role_arn:
+    description: 'IAM role ARN for RUM guest access'
+    value: ${{ steps.get-outputs.outputs.rum_guest_role_arn }}
+  sourcemaps_bucket_name:
+    description: 'S3 bucket for source maps'
+    value: ${{ steps.get-outputs.outputs.sourcemaps_bucket_name }}
 
 runs:
   using: 'composite'
@@ -36,6 +48,12 @@ runs:
         CLOUDFRONT_ID=$(terraform output -raw cloudfront_distribution_id 2>/dev/null || echo "")
         CLOUDFRONT_DOMAIN=$(terraform output -raw cloudfront_domain_name 2>/dev/null || echo "")
 
+        # Get CloudWatch RUM outputs
+        RUM_APP_ID=$(terraform output -raw rum_app_monitor_id 2>/dev/null || echo "")
+        RUM_IDENTITY_POOL=$(terraform output -raw rum_identity_pool_id 2>/dev/null || echo "")
+        RUM_ROLE_ARN=$(terraform output -raw rum_guest_role_arn 2>/dev/null || echo "")
+        SOURCEMAPS_BUCKET=$(terraform output -raw sourcemaps_bucket_name 2>/dev/null || echo "")
+
         # Output S3 bucket
         if [ -n "$S3_BUCKET" ]; then
           echo "✅ Found S3 bucket: $S3_BUCKET"
@@ -58,4 +76,27 @@ runs:
           echo "cloudfront_domain=$CLOUDFRONT_DOMAIN" >> $GITHUB_OUTPUT
         else
           echo "⚠️  No CloudFront domain found in Terraform outputs"
+        fi
+
+        # Output RUM configuration
+        if [ -n "$RUM_APP_ID" ]; then
+          echo "✅ Found RUM app monitor: $RUM_APP_ID"
+          echo "rum_app_monitor_id=$RUM_APP_ID" >> $GITHUB_OUTPUT
+        else
+          echo "⚠️  No RUM app monitor found (will be created on first apply)"
+        fi
+
+        if [ -n "$RUM_IDENTITY_POOL" ]; then
+          echo "✅ Found RUM identity pool: $RUM_IDENTITY_POOL"
+          echo "rum_identity_pool_id=$RUM_IDENTITY_POOL" >> $GITHUB_OUTPUT
+        fi
+
+        if [ -n "$RUM_ROLE_ARN" ]; then
+          echo "✅ Found RUM role: $RUM_ROLE_ARN"
+          echo "rum_guest_role_arn=$RUM_ROLE_ARN" >> $GITHUB_OUTPUT
+        fi
+
+        if [ -n "$SOURCEMAPS_BUCKET" ]; then
+          echo "✅ Found source maps bucket: $SOURCEMAPS_BUCKET"
+          echo "sourcemaps_bucket_name=$SOURCEMAPS_BUCKET" >> $GITHUB_OUTPUT
         fi
