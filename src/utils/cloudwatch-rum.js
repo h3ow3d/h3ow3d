@@ -29,12 +29,12 @@ export const initRUM = () => {
   try {
     const config = {
       sessionSampleRate: 1, // 100% of sessions
-      guestRoleArn,
       identityPoolId,
       endpoint: `https://dataplane.rum.${region}.amazonaws.com`,
       telemetries: ['errors', 'performance', 'http'],
       allowCookies: true,
       enableXRay: false,
+      signing: true,
     }
 
     const appVersion = import.meta.env.VITE_APP_VERSION || '1.0.0'
