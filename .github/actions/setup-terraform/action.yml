@@ -14,6 +14,9 @@ outputs:
   rum_app_monitor_id:
     description: 'CloudWatch RUM app monitor ID'
     value: ${{ steps.get-outputs.outputs.rum_app_monitor_id }}
+  rum_app_monitor_uuid:
+    description: 'CloudWatch RUM app monitor ID'
+    value: ${{ steps.get-outputs.outputs.rum_app_monitor_uuid }}
   rum_identity_pool_id:
     description: 'Cognito identity pool ID for RUM'
     value: ${{ steps.get-outputs.outputs.rum_identity_pool_id }}
