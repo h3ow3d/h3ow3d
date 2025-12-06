@@ -78,7 +78,7 @@ resource "aws_iam_role_policy" "rum_guest_policy" {
       {
         Effect   = "Allow"
         Action   = "rum:PutRumEvents"
-        Resource = aws_rum_app_monitor.h3ow3d.arn
+        Resource = "arn:aws:rum:${var.aws_region}:${data.aws_caller_identity.current.account_id}:appmonitor/${aws_rum_app_monitor.h3ow3d.name}"
       }
     ]
   })
