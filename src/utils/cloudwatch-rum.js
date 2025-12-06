@@ -28,7 +28,7 @@ export const initRUM = () => {
   try {
     const config = {
       sessionSampleRate: 1, // 100% of sessions
-      identityPoolId,
+      identityPoolId: identityPoolId,
       endpoint: `https://dataplane.rum.${region}.amazonaws.com`,
       telemetries: ['errors', 'performance', 'http'],
       allowCookies: true,
