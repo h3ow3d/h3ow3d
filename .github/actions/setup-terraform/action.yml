@@ -59,6 +59,7 @@ runs:
 
         # Get CloudWatch RUM outputs
         RUM_APP_ID=$(terraform output -raw rum_app_monitor_id 2>/dev/null || echo "")
+        RUM_APP_UUID=$(terraform output -raw rum_app_monitor_uuid 2>/dev/null || echo "")
         RUM_IDENTITY_POOL=$(terraform output -raw rum_identity_pool_id 2>/dev/null || echo "")
         RUM_ROLE_ARN=$(terraform output -raw rum_guest_role_arn 2>/dev/null || echo "")
         SOURCEMAPS_BUCKET=$(terraform output -raw sourcemaps_bucket_name 2>/dev/null || echo "")
@@ -93,6 +94,13 @@ runs:
           echo "rum_app_monitor_id=$RUM_APP_ID" >> $GITHUB_OUTPUT
         else
           echo "⚠️  No RUM app monitor found (will be created on first apply)"
+        fi
+
+        if [ -n "$RUM_APP_UUID" ]; then
+          echo "✅ Found RUM app monitor UUID: $RUM_APP_UUID"
+          echo "rum_app_monitor_uuid=$RUM_APP_UUID" >> $GITHUB_OUTPUT
+        else
+          echo "⚠️  No RUM app monitor UUID found (will be created on first apply)"
         fi
 
         if [ -n "$RUM_IDENTITY_POOL" ]; then
