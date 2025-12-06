@@ -16,12 +16,11 @@ export const initRUM = () => {
   }
 
   // Verify required environment variables
-  const appId = import.meta.env.VITE_AWS_RUM_APP_ID
-  const guestRoleArn = import.meta.env.VITE_AWS_RUM_GUEST_ROLE_ARN
+  const appId = import.meta.env.VITE_AWS_RUM_APP_UUID || import.meta.env.VITE_AWS_RUM_APP_ID
   const identityPoolId = import.meta.env.VITE_AWS_RUM_IDENTITY_POOL_ID
   const region = import.meta.env.VITE_AWS_REGION || 'eu-west-2'
 
-  if (!appId || !guestRoleArn || !identityPoolId) {
+  if (!appId || !identityPoolId) {
     console.warn('CloudWatch RUM: Missing required environment variables')
     return
   }

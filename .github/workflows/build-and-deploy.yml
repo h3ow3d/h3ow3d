@@ -85,8 +85,8 @@ jobs:
           VITE_APP_VERSION: ${{ github.sha }}
           VITE_AWS_REGION: ${{ env.AWS_REGION }}
           VITE_AWS_RUM_APP_ID: ${{ steps.terraform.outputs.rum_app_monitor_id }}
+          VITE_AWS_RUM_APP_UUID: ${{ steps.terraform.outputs.rum_app_monitor_uuid }}
           VITE_AWS_RUM_IDENTITY_POOL_ID: ${{ steps.terraform.outputs.rum_identity_pool_id }}
-          VITE_AWS_RUM_GUEST_ROLE_ARN: ${{ steps.terraform.outputs.rum_guest_role_arn }}
         run: npm run build
 
       - name: Archive source maps to private S3

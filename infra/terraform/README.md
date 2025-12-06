@@ -53,7 +53,8 @@ No modules.
 |------|-------------|
 | <a name="output_cloudfront_distribution_id"></a> [cloudfront\_distribution\_id](#output\_cloudfront\_distribution\_id) | CloudFront distribution ID |
 | <a name="output_cloudfront_domain_name"></a> [cloudfront\_domain\_name](#output\_cloudfront\_domain\_name) | CloudFront distribution domain name |
-| <a name="output_rum_app_monitor_id"></a> [rum\_app\_monitor\_id](#output\_rum\_app\_monitor\_id) | CloudWatch RUM App Monitor ID |
+| <a name="output_rum_app_monitor_id"></a> [rum\_app\_monitor\_id](#output\_rum\_app\_monitor\_id) | CloudWatch RUM App Monitor ID (name) |
+| <a name="output_rum_app_monitor_uuid"></a> [rum\_app\_monitor\_uuid](#output\_rum\_app\_monitor\_uuid) | CloudWatch RUM App Monitor UUID |
 | <a name="output_rum_guest_role_arn"></a> [rum\_guest\_role\_arn](#output\_rum\_guest\_role\_arn) | IAM Role ARN for RUM guest access |
 | <a name="output_rum_identity_pool_id"></a> [rum\_identity\_pool\_id](#output\_rum\_identity\_pool\_id) | Cognito Identity Pool ID for RUM |
 | <a name="output_s3_bucket_name"></a> [s3\_bucket\_name](#output\_s3\_bucket\_name) | Name of the S3 bucket for the site |

@@ -20,7 +20,12 @@ output "cloudfront_distribution_id" {
 
 # CloudWatch RUM outputs
 output "rum_app_monitor_id" {
-  description = "CloudWatch RUM App Monitor ID"
+  description = "CloudWatch RUM App Monitor ID (name)"
+  value       = aws_rum_app_monitor.h3ow3d.name
+}
+
+output "rum_app_monitor_uuid" {
+  description = "CloudWatch RUM App Monitor UUID"
   value       = aws_rum_app_monitor.h3ow3d.id
 }
 
