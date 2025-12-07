@@ -3,6 +3,7 @@ import './Comments.css'
 
 function Comments({ postId }) {
   const commentsRef = useRef(null)
+  const viewedRef = useRef(false)
 
   useEffect(() => {
     const commentsContainer = commentsRef.current
@@ -10,6 +11,28 @@ function Comments({ postId }) {
     // Clear existing comments when post changes
     if (commentsContainer) {
       commentsContainer.innerHTML = ''
+    }
+
+    // Reset viewed state when post changes
+    viewedRef.current = false
+
+    // Observer to track when comments section comes into view
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !viewedRef.current) {
+            viewedRef.current = true
+            window.awsRum?.recordEvent('comments_section_viewed', {
+              post_id: postId,
+            })
+          }
+        })
+      },
+      { threshold: 0.1 }
+    )
+
+    if (commentsContainer) {
+      observer.observe(commentsContainer)
     }
 
     // Create script element for Giscus
@@ -40,6 +63,7 @@ function Comments({ postId }) {
       if (commentsContainer) {
         commentsContainer.innerHTML = ''
       }
+      observer.disconnect()
     }
   }, [postId])
 

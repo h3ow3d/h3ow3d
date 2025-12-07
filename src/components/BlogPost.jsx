@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { format } from 'date-fns'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -6,6 +6,44 @@ import Comments from './Comments'
 import './BlogPost.css'
 
 function BlogPost({ post, onBack }) {
+  const startTimeRef = useRef(null)
+
+  useEffect(() => {
+    // Track when user starts reading
+    startTimeRef.current = Date.now()
+
+    // Track when user leaves/unmounts
+    return () => {
+      if (startTimeRef.current) {
+        const timeSpent = Math.round((Date.now() - startTimeRef.current) / 1000)
+        window.awsRum?.recordEvent('post_read_time', {
+          post_id: post.id,
+          post_title: post.title,
+          time_seconds: timeSpent,
+        })
+      }
+    }
+  }, [post.id, post.title])
+
+  // Custom link component to track external link clicks
+  const LinkComponent = ({ href, children, ...props }) => {
+    const handleClick = () => {
+      if (href && (href.startsWith('http://') || href.startsWith('https://'))) {
+        window.awsRum?.recordEvent('external_link_clicked', {
+          post_id: post.id,
+          url: href,
+          link_text: typeof children === 'string' ? children : 'link',
+        })
+      }
+    }
+
+    return (
+      <a href={href} {...props} onClick={handleClick}>
+        {children}
+      </a>
+    )
+  }
+
   return (
     <div className="blog-post">
       <button className="back-button" onClick={onBack}>
@@ -28,7 +66,14 @@ function BlogPost({ post, onBack }) {
         </header>
 
         <div className="post-body">
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            components={{
+              a: LinkComponent,
+            }}
+          >
+            {post.content}
+          </ReactMarkdown>
         </div>
 
         <Comments postId={post.id} postTitle={post.title} />

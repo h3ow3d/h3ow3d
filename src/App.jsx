@@ -24,23 +24,46 @@ function App() {
     setTheme(newTheme)
     document.documentElement.setAttribute('data-theme', newTheme)
     localStorage.setItem('theme', newTheme)
+
+    // Track theme change
+    window.awsRum?.recordEvent('theme_changed', {
+      from_theme: theme,
+      to_theme: newTheme,
+    })
   }
 
   const handlePostClick = (post) => {
     setSelectedPost(post)
     setShowDemo(false)
     window.scrollTo({ top: 0, behavior: 'smooth' })
+
+    // Track post view
+    window.awsRum?.recordEvent('post_viewed', {
+      post_id: post.id,
+      post_title: post.title,
+      post_tags: post.tags.join(','),
+    })
   }
 
   const handleBackToList = () => {
     setSelectedPost(null)
     setShowDemo(false)
+
+    // Track navigation back to list
+    window.awsRum?.recordEvent('navigation', {
+      action: 'back_to_list',
+    })
   }
 
   const handleShowDemo = () => {
     setSelectedPost(null)
     setShowDemo(true)
     window.scrollTo({ top: 0, behavior: 'smooth' })
+
+    // Track demo view
+    window.awsRum?.recordEvent('navigation', {
+      action: 'view_demo',
+    })
   }
 
   return (
