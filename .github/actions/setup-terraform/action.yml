@@ -14,6 +14,9 @@ outputs:
   rum_app_monitor_id:
     description: 'CloudWatch RUM app monitor ID'
     value: ${{ steps.get-outputs.outputs.rum_app_monitor_id }}
+  rum_app_monitor_name:
+    description: 'CloudWatch RUM app monitor name (for CLI update)'
+    value: ${{ steps.get-outputs.outputs.rum_app_monitor_name }}
   rum_app_monitor_uuid:
     description: 'CloudWatch RUM app monitor ID'
     value: ${{ steps.get-outputs.outputs.rum_app_monitor_uuid }}
@@ -94,10 +97,12 @@ runs:
           echo "⚠️  No CloudFront domain found in Terraform outputs"
         fi
 
+
         # Output RUM configuration
         if [ -n "$RUM_APP_ID" ]; then
           echo "✅ Found RUM app monitor: $RUM_APP_ID"
           echo "rum_app_monitor_id=$RUM_APP_ID" >> $GITHUB_OUTPUT
+          echo "rum_app_monitor_name=$RUM_APP_ID" >> $GITHUB_OUTPUT
         else
           echo "⚠️  No RUM app monitor found (will be created on first apply)"
         fi
