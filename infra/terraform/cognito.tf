@@ -2,34 +2,28 @@
 resource "aws_cognito_user_pool" "main" {
   name = "h3ow3d-users"
 
-  # Allow users to sign in with email
-  username_attributes = ["email"]
-
-  # Auto-verify email addresses
+  # Allow email as username
+  alias_attributes         = ["email", "preferred_username"]
   auto_verified_attributes = ["email"]
 
-  # Password policy
+  # Password policy (only needed if allowing email/password signup)
   password_policy {
-    minimum_length    = 8
-    require_lowercase = true
-    require_numbers   = true
-    require_symbols   = true
-    require_uppercase = true
+    minimum_length                   = 8
+    require_lowercase                = true
+    require_uppercase                = true
+    require_numbers                  = true
+    require_symbols                  = true
+    temporary_password_validity_days = 7
   }
 
-  # User attributes
-  schema {
-    name                = "email"
-    attribute_data_type = "String"
-    required            = true
-    mutable             = true
+  # Email configuration
+  email_configuration {
+    email_sending_account = "COGNITO_DEFAULT"
   }
 
-  schema {
-    name                = "name"
-    attribute_data_type = "String"
-    required            = false
-    mutable             = true
+  # User pool settings
+  username_configuration {
+    case_sensitive = false
   }
 
   # Account recovery
@@ -41,9 +35,28 @@ resource "aws_cognito_user_pool" "main" {
   }
 
   tags = {
-    Name        = "h3ow3d-user-pool"
     Environment = "production"
-    ManagedBy   = "terraform"
+    Application = "h3ow3d"
+  }
+}
+
+# Google Social Identity Provider
+resource "aws_cognito_identity_provider" "google" {
+  user_pool_id  = aws_cognito_user_pool.main.id
+  provider_name = "Google"
+  provider_type = "Google"
+
+  provider_details = {
+    authorize_scopes = "profile email openid"
+    client_id        = var.google_client_id
+    client_secret    = var.google_client_secret
+  }
+
+  attribute_mapping = {
+    email    = "email"
+    username = "sub"
+    name     = "name"
+    picture  = "picture"
   }
 }
 
@@ -52,27 +65,30 @@ resource "aws_cognito_user_pool_client" "web" {
   name         = "h3ow3d-web-client"
   user_pool_id = aws_cognito_user_pool.main.id
 
-  # OAuth configuration
-  allowed_oauth_flows_user_pool_client = true
-  allowed_oauth_flows                  = ["implicit"]
-  allowed_oauth_scopes                 = ["openid", "email", "profile"]
-
-  # Callback URLs - update these with your actual domains
   callback_urls = [
     "https://h3ow3d.com",
     "https://www.h3ow3d.com",
     "http://localhost:5173"
   ]
 
-  # Logout URLs
   logout_urls = [
     "https://h3ow3d.com",
     "https://www.h3ow3d.com",
     "http://localhost:5173"
   ]
 
-  # Supported identity providers
-  supported_identity_providers = ["COGNITO", "Google"]
+  allowed_oauth_flows_user_pool_client = true
+  allowed_oauth_flows                  = ["implicit"]
+  allowed_oauth_scopes                 = ["openid", "email", "profile"]
+
+  # Only use Google Social IdP
+  supported_identity_providers = ["Google"]
+
+  # Disable secret for public client (SPA)
+  generate_secret = false
+
+  # Prevent user existence errors
+  prevent_user_existence_errors = "ENABLED"
 
   # Token validity
   id_token_validity      = 60 # minutes
@@ -85,14 +101,8 @@ resource "aws_cognito_user_pool_client" "web" {
     refresh_token = "days"
   }
 
-  # Prevent secret generation (for public client)
-  generate_secret = false
-
-  # Enable token revocation
-  enable_token_revocation = true
-
-  # Prevent user existence errors
-  prevent_user_existence_errors = "ENABLED"
+  # Must be created after the identity provider
+  depends_on = [aws_cognito_identity_provider.google]
 }
 
 # Cognito User Pool Domain
@@ -101,50 +111,21 @@ resource "aws_cognito_user_pool_domain" "main" {
   user_pool_id = aws_cognito_user_pool.main.id
 }
 
-# Google Identity Provider (optional - requires Google OAuth setup)
-# Uncomment and configure after setting up Google OAuth credentials
-#
-# resource "aws_cognito_identity_provider" "google" {
-#   user_pool_id  = aws_cognito_user_pool.main.id
-#   provider_name = "Google"
-#   provider_type = "Google"
-#
-#   provider_details = {
-#     authorize_scopes = "openid email profile"
-#     client_id        = var.google_client_id
-#     client_secret    = var.google_client_secret
-#   }
-#
-#   attribute_mapping = {
-#     email    = "email"
-#     name     = "name"
-#     picture  = "picture"
-#     username = "sub"
-#   }
-# }
+# Data source for current region
+data "aws_region" "current" {}
 
 # Outputs
 output "cognito_user_pool_id" {
-  description = "The ID of the Cognito User Pool"
   value       = aws_cognito_user_pool.main.id
-}
-
-output "cognito_user_pool_arn" {
-  description = "The ARN of the Cognito User Pool"
-  value       = aws_cognito_user_pool.main.arn
-}
-
-output "cognito_user_pool_endpoint" {
-  description = "The endpoint of the Cognito User Pool"
-  value       = aws_cognito_user_pool.main.endpoint
+  description = "Cognito User Pool ID"
 }
 
 output "cognito_client_id" {
-  description = "The client ID for the web application"
   value       = aws_cognito_user_pool_client.web.id
+  description = "Cognito User Pool Client ID"
 }
 
 output "cognito_domain" {
-  description = "The Cognito Hosted UI domain"
-  value       = "${aws_cognito_user_pool_domain.main.domain}.auth.${var.aws_region}.amazoncognito.com"
+  value       = "${aws_cognito_user_pool_domain.main.domain}.auth.${data.aws_region.current.name}.amazoncognito.com"
+  description = "Cognito Hosted UI domain"
 }
