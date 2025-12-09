@@ -34,6 +34,7 @@ export const initRUM = () => {
       allowCookies: true,
       enableXRay: false,
       signing: true,
+      releaseId: appVersion,
     }
 
     const appVersion = import.meta.env.VITE_APP_VERSION || '1.0.0'
