@@ -24,6 +24,11 @@ output "rum_app_monitor_id" {
   value       = aws_rum_app_monitor.h3ow3d.name
 }
 
+output "rum_app_monitor_name" {
+  description = "CloudWatch RUM App Monitor name (for CLI update)"
+  value       = aws_rum_app_monitor.h3ow3d.name
+}
+
 output "rum_app_monitor_uuid" {
   description = "CloudWatch RUM App Monitor UUID"
   value       = aws_rum_app_monitor.h3ow3d.app_monitor_id

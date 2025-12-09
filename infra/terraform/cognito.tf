@@ -66,15 +66,11 @@ resource "aws_cognito_user_pool_client" "web" {
   user_pool_id = aws_cognito_user_pool.main.id
 
   callback_urls = [
-    "https://h3ow3d.com",
-    "https://www.h3ow3d.com",
-    "http://localhost:5173"
+    "https://${aws_cloudfront_distribution.cdn.domain_name}"
   ]
 
   logout_urls = [
-    "https://h3ow3d.com",
-    "https://www.h3ow3d.com",
-    "http://localhost:5173"
+    "https://${aws_cloudfront_distribution.cdn.domain_name}"
   ]
 
   allowed_oauth_flows_user_pool_client = true

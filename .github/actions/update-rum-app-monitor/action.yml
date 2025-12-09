@@ -1,0 +1,28 @@
+name: 'Update CloudWatch RUM App Monitor SourceMaps URI'
+description: 'Updates the SourceMaps S3 URI for the CloudWatch RUM app monitor after deployment.'
+runs:
+  using: 'composite'
+  steps:
+    - name: Update RUM App Monitor SourceMaps URI
+      shell: bash
+      run: |
+        if [ -z "${{ inputs.rum_app_monitor_name }}" ]; then
+          echo "❌ RUM app monitor name not provided!"
+          exit 1
+        fi
+        if [ -z "${{ inputs.sourcemaps_bucket_name }}" ]; then
+          echo "❌ Source maps bucket name not provided!"
+          exit 1
+        fi
+        S3_URI="s3://${{ inputs.sourcemaps_bucket_name }}/"
+        echo "🔄 Updating RUM app monitor '${{ inputs.rum_app_monitor_name }}' with SourceMaps S3 URI: $S3_URI"
+        aws rum update-app-monitor \
+          --name "${{ inputs.rum_app_monitor_name }}" \
+          --app-monitor-configuration "{\"SourceMaps\":{\"S3Location\":\"$S3_URI\"}}"
+inputs:
+  rum_app_monitor_name:
+    description: 'Name of the CloudWatch RUM app monitor.'
+    required: true
+  sourcemaps_bucket_name:
+    description: 'Name of the S3 bucket containing source maps.'
+    required: true

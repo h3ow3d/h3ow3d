@@ -64,6 +64,7 @@ No modules.
 | <a name="output_cognito_domain"></a> [cognito\_domain](#output\_cognito\_domain) | Cognito Hosted UI domain |
 | <a name="output_cognito_user_pool_id"></a> [cognito\_user\_pool\_id](#output\_cognito\_user\_pool\_id) | Cognito User Pool ID |
 | <a name="output_rum_app_monitor_id"></a> [rum\_app\_monitor\_id](#output\_rum\_app\_monitor\_id) | CloudWatch RUM App Monitor ID (name) |
+| <a name="output_rum_app_monitor_name"></a> [rum\_app\_monitor\_name](#output\_rum\_app\_monitor\_name) | CloudWatch RUM App Monitor name (for CLI update) |
 | <a name="output_rum_app_monitor_uuid"></a> [rum\_app\_monitor\_uuid](#output\_rum\_app\_monitor\_uuid) | CloudWatch RUM App Monitor UUID |
 | <a name="output_rum_guest_role_arn"></a> [rum\_guest\_role\_arn](#output\_rum\_guest\_role\_arn) | IAM Role ARN for RUM guest access |
 | <a name="output_rum_identity_pool_id"></a> [rum\_identity\_pool\_id](#output\_rum\_identity\_pool\_id) | Cognito Identity Pool ID for RUM |

@@ -116,12 +116,18 @@ jobs:
 
             echo "✅ Source maps uploaded successfully"
           else
-            echo "⚠️  Source maps bucket not configured, skipping upload"
+            echo "⚠️ Source maps bucket not configured, skipping upload"
           fi
+
+      - name: Update CloudWatch RUM App Monitor SourceMaps URI
+        uses: ./.github/actions/update-rum-app-monitor
+        with:
+          rum_app_monitor_name: ${{ steps.terraform.outputs.rum_app_monitor_name }}
+          sourcemaps_bucket_name: ${{ steps.terraform.outputs.sourcemaps_bucket_name }}
 
       - name: Strip source maps from public bundle
         run: |
-          echo "🗑️  Removing source maps from dist/ before public deployment"
+          echo "🗑️ Removing source maps from dist/ before public deployment"
           find dist -name "*.js.map" -type f -delete
           echo "✅ Source maps removed from public bundle"
 
