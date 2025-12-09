@@ -1,14 +1,17 @@
 import { useState, useEffect } from 'react'
+import { AuthProvider } from './contexts/AuthContext'
 import Header from './components/Header'
 import BlogList from './components/BlogList'
 import BlogPost from './components/BlogPost'
 import SourceMapDemo from './components/SourceMapDemo'
+import UserProfile from './components/UserProfile'
 import { posts } from './data/posts'
 import './App.css'
 
-function App() {
+function AppContent() {
   const [selectedPost, setSelectedPost] = useState(null)
   const [showDemo, setShowDemo] = useState(false)
+  const [showProfile, setShowProfile] = useState(false)
   // Initialize theme from localStorage directly instead of in effect
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem('theme') || 'dark'
@@ -48,6 +51,7 @@ function App() {
   const handleBackToList = () => {
     setSelectedPost(null)
     setShowDemo(false)
+    setShowProfile(false)
 
     // Track navigation back to list
     window.awsRum?.recordEvent('navigation', {
@@ -58,6 +62,7 @@ function App() {
   const handleShowDemo = () => {
     setSelectedPost(null)
     setShowDemo(true)
+    setShowProfile(false)
     window.scrollTo({ top: 0, behavior: 'smooth' })
 
     // Track demo view
@@ -66,11 +71,30 @@ function App() {
     })
   }
 
+  const handleShowProfile = () => {
+    setSelectedPost(null)
+    setShowDemo(false)
+    setShowProfile(true)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+
+    // Track profile view
+    window.awsRum?.recordEvent('navigation', {
+      action: 'view_profile',
+    })
+  }
+
   return (
     <div className="app">
-      <Header theme={theme} onToggleTheme={toggleTheme} onShowDemo={handleShowDemo} />
+      <Header
+        theme={theme}
+        onToggleTheme={toggleTheme}
+        onShowDemo={handleShowDemo}
+        onShowProfile={handleShowProfile}
+      />
       <main className="main-content">
-        {showDemo ? (
+        {showProfile ? (
+          <UserProfile onBack={handleBackToList} />
+        ) : showDemo ? (
           <SourceMapDemo onBack={handleBackToList} />
         ) : selectedPost ? (
           <BlogPost post={selectedPost} onBack={handleBackToList} />
@@ -82,6 +106,14 @@ function App() {
         <p>© {new Date().getFullYear()} h3ow3d. Built with React & hosted on AWS.</p>
       </footer>
     </div>
+  )
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   )
 }
 

@@ -9,12 +9,9 @@
 .header-content {
   max-width: 1200px;
   margin: 0 auto;
-}
-
-.header-main {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
   gap: 1rem;
 }
 
@@ -22,7 +19,7 @@
   font-size: 3rem;
   font-weight: 700;
   color: var(--text);
-  margin-bottom: 0.5rem;
+  margin: 0;
   font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace;
 }
 
@@ -45,7 +42,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-top: -0.5rem;
+  justify-content: center;
 }
 
 .demo-link {
@@ -108,6 +105,57 @@
 .rss-link svg {
   width: 24px;
   height: 24px;
+}
+
+.signin-button {
+  padding: 0.5rem 1rem;
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.signin-button:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 119, 255, 0.3);
+}
+
+.profile-button {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--accent-color);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  overflow: hidden;
+  padding: 0;
+}
+
+.profile-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 119, 255, 0.3);
+}
+
+.profile-button .profile-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-button .profile-avatar-text {
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
 }
 
 .tagline {

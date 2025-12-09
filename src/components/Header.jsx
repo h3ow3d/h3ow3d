@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { useAuth } from '../contexts/AuthContext'
+import AuthModal from './AuthModal'
 import './Header.css'
 
 // Random command-line style variations
@@ -17,7 +19,9 @@ const logoVariations = [
   { prefix: 'kubectl apply -f ', suffix: '.yaml' },
 ]
 
-function Header({ theme, onToggleTheme, onShowDemo }) {
+function Header({ theme, onToggleTheme, onShowDemo, onShowProfile }) {
+  const { isAuthenticated, user } = useAuth()
+  const [showAuthModal, setShowAuthModal] = useState(false)
   const [logoStyle] = useState(() => {
     // Pick a random variation on component mount
     return logoVariations[Math.floor(Math.random() * logoVariations.length)]
@@ -26,61 +30,22 @@ function Header({ theme, onToggleTheme, onShowDemo }) {
   return (
     <header className="header">
       <div className="header-content">
-        <div className="header-main">
-          <h1 className="logo">
-            <span className="logo-command">{logoStyle.prefix}</span>
-            <span className="logo-name">h3ow3d</span>
-            <span className="logo-command">{logoStyle.suffix}</span>
-          </h1>
-          <div className="header-actions">
-            <button onClick={onShowDemo} className="demo-link" title="Source Map Demo">
-              🐛
-            </button>
-            <button
-              onClick={onToggleTheme}
-              className="theme-toggle"
-              aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-              title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-            >
-              {theme === 'dark' ? (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="12" cy="12" r="5"></circle>
-                  <line x1="12" y1="1" x2="12" y2="3"></line>
-                  <line x1="12" y1="21" x2="12" y2="23"></line>
-                  <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                  <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                  <line x1="1" y1="12" x2="3" y2="12"></line>
-                  <line x1="21" y1="12" x2="23" y2="12"></line>
-                  <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                  <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                </svg>
-              ) : (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                </svg>
-              )}
-            </button>
-            <a href="/rss.xml" className="rss-link" aria-label="RSS Feed" title="Subscribe via RSS">
+        <h1 className="logo">
+          <span className="logo-command">{logoStyle.prefix}</span>
+          <span className="logo-name">h3ow3d</span>
+          <span className="logo-command">{logoStyle.suffix}</span>
+        </h1>
+        <div className="header-actions">
+          <button onClick={onShowDemo} className="demo-link" title="Source Map Demo">
+            🐛
+          </button>
+          <button
+            onClick={onToggleTheme}
+            className="theme-toggle"
+            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+            title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+          >
+            {theme === 'dark' ? (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -92,15 +57,79 @@ function Header({ theme, onToggleTheme, onShowDemo }) {
                 strokeLinecap="round"
                 strokeLinejoin="round"
               >
-                <path d="M4 11a9 9 0 0 1 9 9"></path>
-                <path d="M4 4a16 16 0 0 1 16 16"></path>
-                <circle cx="5" cy="19" r="1"></circle>
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
               </svg>
-            </a>
-          </div>
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+              </svg>
+            )}
+          </button>
+          <a href="/rss.xml" className="rss-link" aria-label="RSS Feed" title="Subscribe via RSS">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M4 11a9 9 0 0 1 9 9"></path>
+              <path d="M4 4a16 16 0 0 1 16 16"></path>
+              <circle cx="5" cy="19" r="1"></circle>
+            </svg>
+          </a>
+          {isAuthenticated ? (
+            <button
+              onClick={onShowProfile}
+              className="profile-button"
+              title="View Profile"
+              aria-label="View Profile"
+            >
+              {user?.picture ? (
+                <img src={user.picture} alt={user.name} className="profile-avatar-img" />
+              ) : (
+                <span className="profile-avatar-text">
+                  {user?.name?.charAt(0).toUpperCase() || 'U'}
+                </span>
+              )}
+            </button>
+          ) : (
+            <button
+              onClick={() => setShowAuthModal(true)}
+              className="signin-button"
+              title="Sign In"
+              aria-label="Sign In"
+            >
+              Sign In
+            </button>
+          )}
         </div>
         <p className="tagline">Tech Projects & Development Stories</p>
       </div>
+
+      {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} />}
     </header>
   )
 }
