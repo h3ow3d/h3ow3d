@@ -53,6 +53,14 @@ jobs:
         id: terraform
         uses: ./.github/actions/setup-terraform
 
+      - name: Update CloudWatch RUM App Monitor SourceMaps URI
+        uses: ./.github/actions/update-rum-app-monitor
+        with:
+          rum_app_monitor_id: ${{ steps.terraform.outputs.rum_app_monitor_id }}
+          sourcemaps_bucket_name: ${{ steps.terraform.outputs.sourcemaps_bucket_name }}
+          deobfuscation_status: ENABLED
+          deobfuscation_s3_uri: s3://${{ steps.terraform.outputs.sourcemaps_bucket_name }}/
+
       - name: Extract deployment configuration
         id: config
         run: |
@@ -105,27 +113,21 @@ jobs:
           if [ -n "$SOURCEMAPS_BUCKET" ]; then
             echo "📦 Uploading source maps to s3://$SOURCEMAPS_BUCKET/$VERSION/"
 
-            # Upload all .js.map files to private bucket
-            find dist/assets -name "*.js.map" -type f | while read map_file; do
-              filename=$(basename "$map_file")
+            find dist -name "*.js.map" -type f | while read map_file; do
+              # Remove "dist/" prefix, leaving e.g. "assets/index-vCkUEanh.js.map"
+              relative_path="${map_file#dist/}"
+
               aws s3 cp "$map_file" \
-                "s3://$SOURCEMAPS_BUCKET/$VERSION/$filename" \
+                "s3://$SOURCEMAPS_BUCKET/$VERSION/$relative_path" \
                 --metadata "version=$VERSION,commit=${{ github.sha }},branch=${{ github.ref_name }}"
-              echo "  ✓ Uploaded $filename"
+
+              echo "  ✓ Uploaded $relative_path"
             done
 
             echo "✅ Source maps uploaded successfully"
           else
             echo "⚠️ Source maps bucket not configured, skipping upload"
           fi
-
-      - name: Update CloudWatch RUM App Monitor SourceMaps URI
-        uses: ./.github/actions/update-rum-app-monitor
-        with:
-          rum_app_monitor_id: ${{ steps.terraform.outputs.rum_app_monitor_name }}
-          sourcemaps_bucket_name: ${{ steps.terraform.outputs.sourcemaps_bucket_name }}
-          deobfuscation_status: ENABLED
-          deobfuscation_s3_uri: s3://${{ steps.terraform.outputs.sourcemaps_bucket_name }}/
 
       - name: Strip source maps from public bundle
         run: |
