@@ -21,7 +21,6 @@ runs:
         echo "🔄 Updating RUM app monitor '${{ inputs.rum_app_monitor_id }}' with SourceMaps S3 URI: $S3_URI and deobfuscation config: $DEOBF_CONFIG"
         aws rum update-app-monitor \
           --name "${{ inputs.rum_app_monitor_id }}" \
-          --app-monitor-configuration "{\"SourceMaps\":{\"S3Location\":\"$S3_URI\"}}" \
           --deobfuscation-configuration "$DEOBF_CONFIG"
 inputs:
   rum_app_monitor_id:
