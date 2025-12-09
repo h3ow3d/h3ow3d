@@ -6,7 +6,7 @@ runs:
     - name: Update RUM App Monitor SourceMaps URI
       shell: bash
       run: |
-        if [ -z "${{ inputs.rum_app_monitor_name }}" ]; then
+        if [ -z "${{ inputs.rum_app_monitor_id }}" ]; then
           echo "❌ RUM app monitor name not provided!"
           exit 1
         fi
@@ -15,12 +15,12 @@ runs:
           exit 1
         fi
         S3_URI="s3://${{ inputs.sourcemaps_bucket_name }}/"
-        echo "🔄 Updating RUM app monitor '${{ inputs.rum_app_monitor_name }}' with SourceMaps S3 URI: $S3_URI"
+        echo "🔄 Updating RUM app monitor '${{ inputs.rum_app_monitor_id }}' with SourceMaps S3 URI: $S3_URI"
         aws rum update-app-monitor \
-          --name "${{ inputs.rum_app_monitor_name }}" \
+          --name "${{ inputs.rum_app_monitor_id }}" \
           --app-monitor-configuration "{\"SourceMaps\":{\"S3Location\":\"$S3_URI\"}}"
 inputs:
-  rum_app_monitor_name:
+  rum_app_monitor_id:
     description: 'Name of the CloudWatch RUM app monitor.'
     required: true
   sourcemaps_bucket_name:
