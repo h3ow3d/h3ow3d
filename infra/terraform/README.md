@@ -49,9 +49,9 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_GOOGLE_CLIENT_ID"></a> [GOOGLE\_CLIENT\_ID](#input\_GOOGLE\_CLIENT\_ID) | Google OAuth 2.0 client ID for Social Identity Provider | `string` | n/a | yes |
-| <a name="input_GOOGLE_CLIENT_SECRET"></a> [GOOGLE\_CLIENT\_SECRET](#input\_GOOGLE\_CLIENT\_SECRET) | Google OAuth 2.0 client secret for Social Identity Provider | `string` | n/a | yes |
 | <a name="input_aws_region"></a> [aws\_region](#input\_aws\_region) | AWS region to deploy resources into | `string` | `"eu-west-2"` | no |
+| <a name="input_google_client_id"></a> [google\_client\_id](#input\_google\_client\_id) | Google OAuth 2.0 client ID for Social Identity Provider | `string` | n/a | yes |
+| <a name="input_google_client_secret"></a> [google\_client\_secret](#input\_google\_client\_secret) | Google OAuth 2.0 client secret for Social Identity Provider | `string` | n/a | yes |
 | <a name="input_project_name"></a> [project\_name](#input\_project\_name) | Project name used for resource naming | `string` | `"h3ow3d"` | no |
 
 ## Outputs

@@ -117,3 +117,21 @@ runs:
           echo "✅ Found source maps bucket: $SOURCEMAPS_BUCKET"
           echo "sourcemaps_bucket_name=$SOURCEMAPS_BUCKET" >> $GITHUB_OUTPUT
         fi
+
+          # Cognito outputs
+          COGNITO_USER_POOL_ID=$(terraform output -raw cognito_user_pool_id 2>/dev/null || echo "")
+          COGNITO_CLIENT_ID=$(terraform output -raw cognito_client_id 2>/dev/null || echo "")
+          COGNITO_DOMAIN=$(terraform output -raw cognito_domain 2>/dev/null || echo "")
+
+          if [ -n "$COGNITO_USER_POOL_ID" ]; then
+            echo "✅ Found Cognito User Pool ID: $COGNITO_USER_POOL_ID"
+            echo "cognito_user_pool_id=$COGNITO_USER_POOL_ID" >> $GITHUB_OUTPUT
+          fi
+          if [ -n "$COGNITO_CLIENT_ID" ]; then
+            echo "✅ Found Cognito Client ID: $COGNITO_CLIENT_ID"
+            echo "cognito_client_id=$COGNITO_CLIENT_ID" >> $GITHUB_OUTPUT
+          fi
+          if [ -n "$COGNITO_DOMAIN" ]; then
+            echo "✅ Found Cognito Domain: $COGNITO_DOMAIN"
+            echo "cognito_domain=$COGNITO_DOMAIN" >> $GITHUB_OUTPUT
+          fi

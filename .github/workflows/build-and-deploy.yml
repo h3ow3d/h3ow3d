@@ -91,6 +91,8 @@ jobs:
           VITE_AWS_RUM_APP_ID: ${{ steps.terraform.outputs.rum_app_monitor_id }}
           VITE_AWS_RUM_APP_UUID: ${{ steps.terraform.outputs.rum_app_monitor_uuid }}
           VITE_AWS_RUM_IDENTITY_POOL_ID: ${{ steps.terraform.outputs.rum_identity_pool_id }}
+          VITE_COGNITO_DOMAIN: ${{ steps.terraform.outputs.cognito_domain }}
+          VITE_COGNITO_CLIENT_ID: ${{ steps.terraform.outputs.cognito_client_id }}
         run: npm run build
 
       - name: Archive source maps to private S3
