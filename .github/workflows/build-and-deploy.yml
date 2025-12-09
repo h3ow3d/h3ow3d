@@ -122,8 +122,10 @@ jobs:
       - name: Update CloudWatch RUM App Monitor SourceMaps URI
         uses: ./.github/actions/update-rum-app-monitor
         with:
-          rum_app_monitor_id: ${{ steps.terraform.outputs.rum_app_monitor_id }}
+          rum_app_monitor_name: ${{ steps.terraform.outputs.rum_app_monitor_name }}
           sourcemaps_bucket_name: ${{ steps.terraform.outputs.sourcemaps_bucket_name }}
+          deobfuscation_status: ENABLED
+          deobfuscation_s3_uri: s3://${{ steps.terraform.outputs.sourcemaps_bucket_name }}/
 
       - name: Strip source maps from public bundle
         run: |
