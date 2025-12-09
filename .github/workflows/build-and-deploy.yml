@@ -26,6 +26,8 @@ jobs:
     outputs:
       s3_bucket: ${{ steps.config.outputs.s3_bucket }}
       cloudfront_id: ${{ steps.config.outputs.cloudfront_id }}
+      cognito_domain: ${{ steps.terraform.outputs.cognito_domain }}
+      cognito_client_id: ${{ steps.terraform.outputs.cognito_client_id }}
 
     steps:
       - name: Checkout code
