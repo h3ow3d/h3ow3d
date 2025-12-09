@@ -1,94 +1,78 @@
 # SSO Authentication Setup Guide
 
-Your app has been refactored to support SSO authentication using AWS Cognito
-Hosted UI.
+Your app uses AWS Cognito with Google Social Identity Provider for
+authentication.
 
-## What Was Added
+## Overview
+
+Users sign in with their Google accounts through Cognito Hosted UI. No
+additional identity provider setup is required - users just bring their
+existing Google accounts.
+
+## What Was Implemented
 
 ### Frontend Components
 
-- ✅ `src/services/ssoAuth.js` - Cognito Hosted UI integration
-- ✅ `src/contexts/AuthContext.jsx` - React auth context with RUM integration
-- ✅ `src/components/AuthModal.jsx` - Sign in modal
-- ✅ `src/components/UserProfile.jsx` - User profile page
+- ✅ `src/services/ssoAuth.js` - Cognito Hosted UI integration with mock mode
+- ✅ `src/contexts/AuthContext.jsx` - Auth context with RUM tracking
+- ✅ `src/components/AuthModal.jsx` - Sign-in modal with Lucide icons
+- ✅ `src/components/UserProfile.jsx` - User profile page with tabs
 - ✅ `src/components/AuthModal.css` - Auth modal styles
 - ✅ `src/components/UserProfile.css` - User profile styles
-- ✅ Updated `src/App.jsx` - Wrapped with AuthProvider
-- ✅ Updated `src/components/Header.jsx` - Added auth buttons
+- ✅ Updated `src/App.jsx` - Wrapped with AuthProvider, profile route
+- ✅ Updated `src/components/Header.jsx` - Auth buttons with Lucide icons
 
 ### Infrastructure
 
-- ✅ `infra/terraform/cognito.tf` - Cognito User Pool configuration
+- ✅ `infra/terraform/cognito.tf` - User Pool with Google Social IdP
+- ✅ `infra/terraform/variables.tf` - Google OAuth credential variables
 
-## Next Steps
+### Documentation
 
-### 1. Deploy Terraform Infrastructure
+- ✅ `docs/GOOGLE_SOCIAL_IDP_SETUP.md` - Google OAuth setup guide
+- ✅ `docs/GITHUB_ACTIONS_SETUP.md` - CI/CD integration guide
 
-```bash
-cd infra/terraform
-terraform init
-terraform plan
-terraform apply
-```
+## Development Setup
 
-This will create:
-
-- Cognito User Pool
-- User Pool Client
-- Cognito Domain (Hosted UI)
-
-### 2. Get Terraform Outputs
-
-After deploying, get the required values:
+Mock authentication is enabled by default for local development:
 
 ```bash
-terraform output cognito_client_id
-terraform output cognito_domain
-terraform output cognito_user_pool_id
+# .env.local
+VITE_MOCK_AUTH=true
 ```
 
-### 3. Update Environment Variables
+This allows you to test the auth UI without deploying Cognito infrastructure.
 
-Create or update `.env.local` in your project root:
+## Production Deployment
 
-```bash
-VITE_COGNITO_DOMAIN=h3ow3d-auth.auth.eu-west-2.amazoncognito.com
-VITE_COGNITO_CLIENT_ID=<from terraform output>
-VITE_REDIRECT_URI=https://h3ow3d.com
-```
+See the detailed guides:
 
-For local development, also add to `.env.local`:
+1. **[Google OAuth Setup](./GOOGLE_SOCIAL_IDP_SETUP.md)** - Create Google
+   OAuth credentials
+2. **[GitHub Actions Setup](./GITHUB_ACTIONS_SETUP.md)** - Configure secrets
+   and CI/CD
 
-```bash
-VITE_REDIRECT_URI=http://localhost:5173
-```
+### Quick Start
 
-### 4. Update GitHub Actions
+1. **Create Google OAuth Credentials** (one-time setup)
+   - Follow `docs/GOOGLE_SOCIAL_IDP_SETUP.md`
+   - Get Client ID and Client Secret
 
-Add the Cognito environment variables to your GitHub Actions workflow:
+2. **Add GitHub Secrets**
+   - `TF_VAR_google_client_id`
+   - `TF_VAR_google_client_secret`
 
-```yaml
-env:
-  # ... existing env vars ...
-  VITE_COGNITO_DOMAIN: ${{ secrets.COGNITO_DOMAIN }}
-  VITE_COGNITO_CLIENT_ID: ${{ secrets.COGNITO_CLIENT_ID }}
-  VITE_REDIRECT_URI: https://h3ow3d.com
-```
+3. **Deploy Infrastructure**
 
-Add the secrets in GitHub:
+   ```bash
+   cd infra/terraform
+   terraform init
+   terraform apply
+   ```
 
-- Repository → Settings → Secrets and variables → Actions
-- Add `COGNITO_DOMAIN` and `COGNITO_CLIENT_ID`
-
-### 5. (Optional) Set Up Google OAuth
-
-To enable Google sign-in:
-
-1. Go to [Google Cloud Console](https://console.cloud.google.com/)
-2. Create OAuth 2.0 credentials
-3. Add authorized redirect URIs:
-   - `https://h3ow3d-auth.auth.eu-west-2.amazoncognito.com/oauth2/idpresponse`
-4. Update `infra/terraform/variables.tf`:
+4. **Deploy Frontend**
+   - GitHub Actions will automatically use Terraform outputs
+   - Build includes Cognito configuration from outputs
 
    ```hcl
    variable "google_client_id" {
@@ -113,70 +97,104 @@ To enable Google sign-in:
 npm run dev
 ```
 
-Visit `http://localhost:5173` and click "Sign In" to test the authentication flow.
+## Features
+
+### Mock Authentication for Development
+
+When `VITE_MOCK_AUTH=true` (default in `.env.local`):
+
+- No AWS infrastructure required
+- Sign in with any email (e.g., `test@example.com`)
+- Instant authentication for testing UI
+- Perfect for development and testing
+
+### Production Authentication
+
+When deployed with `VITE_MOCK_AUTH=false`:
+
+- Users sign in with Google accounts
+- Managed by AWS Cognito Hosted UI
+- Secure token-based authentication
+- RUM tracking integration
 
 ## How It Works
 
-1. **Sign In Flow:**
-   - User clicks "Sign In" button
-   - Redirects to Cognito Hosted UI
-   - User authenticates (with email/password or Google)
-   - Cognito redirects back with tokens in URL hash
-   - App parses tokens and stores them in localStorage
-   - User is authenticated
+### Sign-In Flow
 
-2. **Session Persistence:**
-   - Tokens stored in localStorage
-   - On page refresh, AuthContext checks for valid token
-   - Expired tokens are automatically cleared
+1. User clicks "Sign In" button
+2. Redirects to Cognito Hosted UI (`h3ow3d-auth.auth.eu-west-2.amazoncognito.com`)
+3. User authenticates with Google
+4. Cognito redirects back with tokens in URL hash
+5. App parses tokens and stores in localStorage
+6. User is authenticated, RUM session updated
 
-3. **RUM Integration:**
-   - User authentication events tracked
-   - User ID associated with RUM session
-   - All subsequent events linked to user
+### Session Persistence
 
-4. **Sign Out:**
-   - Clears local tokens
-   - Redirects to Cognito logout endpoint
-   - Cognito clears session and redirects back
+- Tokens stored in localStorage
+- On page refresh, AuthContext checks for valid token
+- Expired tokens automatically cleared
+- Sign out clears tokens and Cognito session
+
+### RUM Integration
+
+- Auth events tracked (sign-in, sign-out)
+- User ID associated with RUM session
+- All events linked to authenticated user
 
 ## Architecture
 
 ```text
-User → Sign In Button → Cognito Hosted UI
-                           ↓
-                      Authenticate
-                           ↓
-                    Redirect with Tokens
-                           ↓
-        App (stores tokens, updates state)
-                           ↓
-                    Authenticated Session
-                           ↓
-                    RUM Tracking with User ID
+User → Sign In → Cognito Hosted UI → Google OAuth
+                                         ↓
+                                   Authenticate
+                                         ↓
+                              Redirect with Tokens
+                                         ↓
+                    App (stores tokens, updates state)
+                                         ↓
+                              Authenticated Session
+                                         ↓
+                           RUM Tracking with User ID
 ```
 
-## Security Notes
+## Security
 
-- Tokens stored in localStorage (consider httpOnly cookies for production)
-- No passwords handled by your app
-- All authentication managed by AWS Cognito
-- Token expiration handled automatically
-- Uses implicit OAuth flow (suitable for SPAs)
+- ✅ No passwords handled by your app
+- ✅ All authentication managed by AWS Cognito
+- ✅ OAuth 2.0 implicit flow (suitable for SPAs)
+- ✅ Tokens auto-expire (access token: 1 hour, ID token: 1 hour)
+- ⚠️ Tokens stored in localStorage (acceptable for SPAs)
 
 ## Troubleshooting
 
 ### "Invalid redirect URI" error
 
-- Check callback URLs in Cognito User Pool Client match your domain
-- Ensure URLs include protocol (https://)
+Check callback URLs in `cognito.tf` match your domain:
+
+```hcl
+callback_urls = [
+  "https://h3ow3d.com",
+  "https://www.h3ow3d.com",
+  "http://localhost:5173"
+]
+```
 
 ### Tokens not persisting
 
-- Check browser localStorage
-- Verify VITE_REDIRECT_URI matches current domain
+- Check browser localStorage for `cognitoTokens` key
+- Verify redirect URI matches configured callback URLs
+- Check browser console for errors
 
 ### RUM not tracking authenticated users
 
-- Check browser console for errors
-- Verify RUM is initialized before auth context
+- Verify RUM initialized before AuthContext (`src/main.jsx`)
+- Check browser console for `recordEvent` errors
+- Ensure RUM identity pool has correct permissions
+
+### Mock auth not working locally
+
+Ensure `.env.local` has:
+
+```bash
+VITE_MOCK_AUTH=true
+```

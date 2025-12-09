@@ -9,11 +9,11 @@ You need to add the following secrets to your GitHub repository:
 
 ### 1. Google OAuth Credentials
 
-- `TF_VAR_google_client_id` - Your Google OAuth Client ID
-- `TF_VAR_google_client_secret` - Your Google OAuth Client Secret
+- `TF_VAR_GOOGLE_CLIENT_ID` - Your Google OAuth Client ID
+- `TF_VAR_GOOGLE_CLIENT_SECRET` - Your Google OAuth Client Secret
 
-The `TF_VAR_` prefix tells Terraform to treat these as Terraform variables
-automatically.
+**Note:** GitHub automatically converts secret names to uppercase, so use
+uppercase for consistency.
 
 ### 2. AWS Credentials (if not already set)
 
@@ -41,8 +41,8 @@ Your workflow needs to:
 - name: Terraform Apply
   working-directory: infra/terraform
   env:
-    TF_VAR_google_client_id: ${{ secrets.TF_VAR_google_client_id }}
-    TF_VAR_google_client_secret: ${{ secrets.TF_VAR_google_client_secret }}
+    TF_VAR_google_client_id: ${{ secrets.TF_VAR_GOOGLE_CLIENT_ID }}
+    TF_VAR_google_client_secret: ${{ secrets.TF_VAR_GOOGLE_CLIENT_SECRET }}
   run: |
     terraform init
     terraform apply -auto-approve
@@ -57,8 +57,7 @@ Your workflow needs to:
       $GITHUB_OUTPUT
     echo "cognito_user_pool_id=$(
       terraform output -raw cognito_user_pool_id
-    )" >> \
-      $GITHUB_OUTPUT
+    )" >> $GITHUB_OUTPUT
 
 - name: Build Application
   env:

@@ -19,6 +19,10 @@ jobs:
       contents: read
       id-token: write # Required for OIDC authentication
 
+    env:
+      TF_VAR_google_client_id: ${{ secrets.TF_VAR_GOOGLE_CLIENT_ID }}
+      TF_VAR_google_client_secret: ${{ secrets.TF_VAR_GOOGLE_CLIENT_SECRET }}
+
     outputs:
       s3_bucket: ${{ steps.config.outputs.s3_bucket }}
       cloudfront_id: ${{ steps.config.outputs.cloudfront_id }}

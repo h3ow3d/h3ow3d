@@ -1,212 +1,200 @@
-# Deployment Checklist for CloudWatch RUM
+# Deployment Checklist
 
-## ✅ Pre-Deployment (Complete)
+## ✅ Infrastructure Complete
 
-- [x] CloudWatch RUM SDK installed (`aws-rum-web`)
-- [x] Frontend integration complete (`src/main.jsx`, `src/utils/cloudwatch-rum.js`)
-- [x] Terraform infrastructure defined (`infra/terraform/cloudwatch-rum.tf`)
-- [x] GitHub Actions workflow updated
-- [x] Setup-terraform action updated to extract RUM outputs
-- [x] Source map demo page ready (🐛 icon)
-- [x] Documentation created
-- [x] Build tested locally
+- [x] CloudWatch RUM configured and deployed
+- [x] Cognito User Pool with Google Social IdP configured
+- [x] Terraform infrastructure defined and documented
+- [x] GitHub Actions workflow configured
+- [x] Source maps enabled for error debugging
+
+## ✅ Frontend Complete
+
+- [x] RUM SDK integrated (`aws-rum-web`)
+- [x] Custom event tracking throughout app
+- [x] SSO authentication with Google
+- [x] User profile management
+- [x] Mock auth for development
+- [x] Lucide React icons
+- [x] Comments system (Giscus)
+- [x] RSS feed generation
+
+## 🚀 Deployment Prerequisites
+
+### 1. Google OAuth Credentials
+
+- [ ] Created OAuth 2.0 Client ID in Google Cloud Console
+- [ ] Added callback URLs to authorized redirect URIs
+- [ ] Saved Client ID and Client Secret
+
+See: `docs/GOOGLE_SOCIAL_IDP_SETUP.md`
+
+### 2. GitHub Secrets Configured
+
+- [x] `AWS_ACCESS_KEY_ID`
+- [x] `AWS_SECRET_ACCESS_KEY`
+- [x] `TF_VAR_GOOGLE_CLIENT_ID`
+- [x] `TF_VAR_GOOGLE_CLIENT_SECRET`
+
+**Note:** GitHub automatically uppercases secret names.
+
+See: `docs/GITHUB_ACTIONS_SETUP.md`
 
 ## 🚀 Deployment Steps
 
-### 1. Commit and Push
+### 1. Deploy Terraform Infrastructure
+
+```bash
+cd infra/terraform
+terraform init
+terraform plan
+terraform apply
+```
+
+This creates:
+
+- Cognito User Pool
+- Google Social Identity Provider
+- User Pool Client
+- Cognito Hosted UI Domain
+
+### 2. Commit and Push
 
 ```bash
 git add .
-git commit -m "feat: add AWS CloudWatch RUM with source maps"
+git commit -m "feat: deploy SSO with Google Social IdP"
 git push origin main
 ```
 
-### 2. Monitor GitHub Actions
+### 3. Monitor GitHub Actions
 
 Watch the workflow at: <https://github.com/h3ow3d/h3ow3d/actions>
 
-**What will happen:**
+**Deployment steps:**
 
 1. ✅ Checkout code
 2. ✅ Setup Node.js and install dependencies
 3. ✅ Configure AWS credentials
-4. ✅ **Terraform init** (initialize with new cloudwatch-rum.tf)
-5. ✅ **Terraform apply** (create RUM resources - auto-approved in workflow)
-6. ✅ Get Terraform outputs (including new RUM values)
-7. ✅ Build app with RUM environment variables
-8. ✅ Upload source maps to private S3 bucket
-9. ✅ Remove source maps from public bundle
-10. ✅ Deploy to S3
-11. ✅ Invalidate CloudFront cache
+4. ✅ Terraform init and apply (with Google OAuth secrets)
+5. ✅ Get Terraform outputs (Cognito config, RUM config)
+6. ✅ Build app with all environment variables
+7. ✅ Upload source maps to private S3 bucket
+8. ✅ Remove source maps from public bundle
+9. ✅ Deploy to CloudFront via S3
 
-**Expected duration:** 5-8 minutes
+### 4. Verify Deployment
 
-### 3. Verify Terraform Resources Created
+1. **Check Cognito User Pool**
+   - AWS Console → Cognito → User Pools → h3ow3d-users
+   - Verify Google identity provider is configured
+   - Check domain: `h3ow3d-auth.auth.eu-west-2.amazoncognito.com`
 
-After workflow completes, check that these resources exist:
+2. **Test Authentication**
+   - Visit <https://h3ow3d.com>
+   - Click "Sign In" button
+   - Should redirect to Cognito Hosted UI
+   - Sign in with Google account
+   - Verify redirected back and authenticated
 
-```bash
-# List RUM app monitors
-aws rum list-app-monitors --region eu-west-2
+3. **Check RUM Dashboard**
+   - AWS Console → CloudWatch → RUM → h3ow3d-monitor
+   - Verify sessions being recorded
+   - Check custom events (theme_toggle, post_view, etc.)
+   - Verify user authentication events tracked
 
-# List Cognito identity pools
-aws cognito-identity list-identity-pools --max-results 10 --region eu-west-2
+4. **Test User Profile**
+   - Click profile icon in header
+   - Verify profile page displays user info
+   - Test sign-out functionality
 
-# Check source maps bucket
-aws s3 ls | grep sourcemaps
-```
+## 📊 Post-Deployment Monitoring
 
-### 4. Test the Demo Page
+### CloudWatch RUM Metrics
 
-1. Visit your site (wait for CloudFront cache to clear if needed)
-2. Look for "CloudWatch RUM: Initialized successfully" in browser console
-3. Click the 🐛 icon to open the demo page
-4. Click any error button
-5. Verify errors appear in browser console
+Monitor these metrics in CloudWatch:
 
-### 5. Check CloudWatch RUM Console (after 5-10 minutes)
+- Session count
+- Error rate
+- Page load times
+- Custom event counts (post_view, comment_click, etc.)
+- User authentication events
 
-```bash
-# Open CloudWatch RUM in AWS Console
-open "https://console.aws.amazon.com/cloudwatch/home?region=eu-west-2#rum:monitors"
-```
+### Cognito Metrics
 
-Or navigate to:
+- Sign-in attempts
+- Failed authentication
+- User registrations
+- Token usage
 
-- AWS Console → CloudWatch → Application Monitoring → CloudWatch RUM
-- Select `h3ow3d-monitor`
-- View errors with un-minified stack traces
+### Cost Monitoring
 
-### 6. Verify Source Maps
+- CloudWatch RUM: Usage and costs
+- Cognito: MAU (Monthly Active Users)
+- CloudFront: Data transfer and requests
 
-```bash
-# Check that source maps were uploaded
-aws s3 ls s3://h3ow3d-sourcemaps/ --recursive
+## 🔧 Troubleshooting
 
-# You should see files like:
-# <commit-sha>/index-ABC123.js.map
-# <commit-sha>/vendor-XYZ789.js.map
-```
+### Authentication Issues
 
-## 🔍 What to Look For
+**Problem:** "Invalid redirect URI"
 
-### In GitHub Actions Logs
+- Check callback URLs in `cognito.tf`
+- Verify Terraform applied successfully
+- Check CloudFront distribution URL matches callback
 
-```text
-✅ Found RUM app monitor: <id>
-✅ Found RUM identity pool: <pool-id>
-✅ Found RUM role: arn:aws:iam::...
-✅ Found source maps bucket: h3ow3d-sourcemaps
-📦 Uploading source maps to s3://h3ow3d-sourcemaps/<commit-sha>/
-  ✓ Uploaded index-ABC123.js.map
-  ✓ Uploaded vendor-XYZ789.js.map
-✅ Source maps uploaded successfully
-🗑️  Removing source maps from dist/ before public deployment
-✅ Source maps removed from public bundle
-```
+**Problem:** Google sign-in fails
 
-### In Browser Console
+- Verify Google OAuth credentials in GitHub Secrets
+- Check authorized redirect URIs in Google Cloud Console
+- Ensure Cognito domain matches redirect URI
 
-```text
-CloudWatch RUM: Initialized successfully
-  appId: "<your-app-id>"
-  version: "<commit-sha>"
-  region: "eu-west-2"
-```
+### RUM Not Tracking
 
-### In CloudWatch RUM Dashboard
+**Problem:** No sessions in RUM dashboard
 
-- **Errors tab**: Stack traces showing `SourceMapDemo.jsx:10:5`
-- **Performance tab**: Page load metrics
-- **Sessions tab**: User session data
+- Check browser console for errors
+- Verify RUM environment variables in build
+- Check identity pool permissions
+- Ensure RUM initialized before page interactions
 
-## 🆘 Troubleshooting
+### Deployment Failures
 
-### Workflow fails on Terraform apply
+**Problem:** Terraform apply fails
 
-**Issue:** Terraform can't create resources
+- Check AWS credentials in GitHub Secrets
+- Verify IAM permissions for Cognito operations
+- Check Terraform state lock (S3 backend)
+- Review GitHub Actions logs for specific errors
 
-**Solutions:**
+**Problem:** Build fails with missing env vars
 
-- Check AWS credentials are valid
-- Verify region is correct (eu-west-2)
-- Check if bucket name `h3ow3d-sourcemaps` is available
-- Review Terraform error in workflow logs
+- Verify Terraform outputs step succeeded
+- Check workflow YAML syntax
+- Ensure all VITE\_ variables defined
 
-### RUM not initializing in browser
+## 📚 Additional Documentation
 
-**Issue:** No console log "CloudWatch RUM: Initialized successfully"
+- `docs/SSO_SETUP.md` - SSO authentication overview
+- `docs/GOOGLE_SOCIAL_IDP_SETUP.md` - Google OAuth setup guide
+- `docs/GITHUB_ACTIONS_SETUP.md` - CI/CD integration guide
+- `docs/CLOUDWATCH_RUM.md` - RUM monitoring documentation
 
-**Check:**
-
-1. View page source - verify environment variables are in JS:
-
-   ```text
-   VITE_AWS_RUM_APP_ID
-   VITE_AWS_RUM_IDENTITY_POOL_ID
-   VITE_AWS_RUM_GUEST_ROLE_ARN
-   ```
-
-2. Check GitHub Actions build logs for RUM env vars
-3. Ensure you're on production site (not localhost)
-
-### Source maps not in S3
-
-**Issue:** No files in `s3://h3ow3d-sourcemaps/`
-
-**Check:**
-
-1. Review GitHub Actions logs for "Uploading source maps"
-2. Verify build generated `.js.map` files before upload
-3. Check AWS credentials have S3 write permissions
-
-### Errors not appearing in CloudWatch
-
-**Issue:** No data in CloudWatch RUM dashboard
-
-**Wait first:** Events can take 5-10 minutes to appear
-
-**Then check:**
-
-1. RUM SDK initialized (browser console log)
-2. IAM role has `rum:PutRumEvents` permission
-3. Cognito identity pool is properly configured
-4. Network tab shows requests to `dataplane.rum.eu-west-2.amazonaws.com`
-
-### Stack traces still minified
-
-**Issue:** Errors show `index-ABC123.js:1:23456` instead of original files
-
-**Wait first:** CloudWatch needs time to process source maps
-
-**Then check:**
-
-1. Source maps uploaded to S3 for this version
-2. Bucket policy allows CloudWatch RUM access
-3. Try a fresh error (not cached)
-
-## 📊 Expected Costs
+## 💰 Expected Costs
 
 ### CloudWatch RUM
 
-- **Free tier**: 100,000 events/month
-- **After free tier**: $1.00 per 100,000 events
-- **Estimated for blog**: $0-2/month
+- Free tier: 100,000 events/month
+- After free tier: $1.00 per 100,000 events
+- Estimated: $0-2/month for typical blog traffic
 
-### S3 Source Maps
+### AWS Cognito
 
-- **Storage**: ~1MB per version × 90 days retention
-- **Cost**: ~$0.02/month
-- **Lifecycle**: Auto-cleanup after 90 days
+- Free tier: 50,000 MAU (Monthly Active Users)
+- After free tier: $0.0055 per MAU
+- Estimated: $0/month (under free tier for blog)
 
-### Total estimated cost: **$0-2/month**
+### S3 & CloudFront
 
-## 📚 Additional Resources
+- Existing costs (source maps add ~$0.02/month)
 
-- See `docs/CLOUDWATCH_RUM.md` for detailed documentation
-- See `CLOUDWATCH_RUM_SETUP.md` for architecture overview
-- [AWS CloudWatch RUM Docs](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-RUM.html)
-
----
-
-**Ready?** Just push to GitHub and watch the magic happen! 🚀
+Total additional cost: ~$0-2/month

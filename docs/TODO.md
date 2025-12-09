@@ -6,6 +6,8 @@
 - [x] Deploy latest changes to production
 - [x] Verify Giscus comments are working on deployed site
 - [x] Test RSS feed on production
+- [x] Add analytics integration (CloudWatch RUM)
+- [x] Add authentication and user profiles (Google SSO)
 
 ## Features to Consider
 
@@ -13,10 +15,10 @@
 - [ ] Implement tag filtering system
 - [ ] Add reading time estimates to posts
 - [ ] Add social share buttons
-- [ ] Analytics integration (Plausible/Google Analytics/Umami)
 - [ ] SEO optimization (meta tags, Open Graph, Twitter Cards)
 - [ ] Add 404 page
 - [ ] Add loading states/animations
+- [ ] Add support for more SSO providers (Meta, Amazon, Apple)
 
 ## Content
 
@@ -28,11 +30,12 @@
 
 ## DevOps
 
-- [ ] Monitor CloudFront costs
+- [x] Monitor CloudFront costs
+- [x] Document deployment process
 - [ ] Set up alerts for deployment failures
 - [ ] Consider adding staging environment
-- [ ] Document deployment process
 - [ ] Add automated tests
+- [ ] Set up CloudWatch alarms for RUM errors
 
 ## Future Enhancements
 

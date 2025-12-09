@@ -44,7 +44,7 @@ runs:
         echo "🔧 Initializing Terraform..."
         terraform init
 
-        echo "� Planning Terraform changes..."
+        echo "📋 Planning Terraform changes..."
         terraform plan -out=tfplan
 
         echo "🚀 Applying Terraform changes..."
