@@ -26,6 +26,12 @@ outputs:
   sourcemaps_bucket_name:
     description: 'S3 bucket for source maps'
     value: ${{ steps.get-outputs.outputs.sourcemaps_bucket_name }}
+  cognito_domain:
+    description: 'Cognito Hosted UI domain'
+    value: ${{ steps.outputs.outputs.cognito_domain }}
+  cognito_client_id:
+    description: 'Cognito User Pool Client ID'
+    value: ${{ steps.outputs.outputs.cognito_client_id }}
 
 runs:
   using: 'composite'
