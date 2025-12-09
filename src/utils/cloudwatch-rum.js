@@ -33,7 +33,7 @@ export const initRUM = () => {
       telemetries: ['errors', 'performance', 'http'],
       allowCookies: true,
       enableXRay: false,
-      signing: true,
+      signing: false,
       releaseId: appVersion,
     }
 
