@@ -26,6 +26,8 @@ export const initRUM = () => {
   }
 
   try {
+    const appVersion = import.meta.env.VITE_APP_VERSION || '1.0.0'
+
     const config = {
       sessionSampleRate: 1, // 100% of sessions
       identityPoolId: identityPoolId,
@@ -36,8 +38,6 @@ export const initRUM = () => {
       signing: false,
       releaseId: appVersion,
     }
-
-    const appVersion = import.meta.env.VITE_APP_VERSION || '1.0.0'
 
     awsRumInstance = new AwsRum(appId, appVersion, region, config)
 
