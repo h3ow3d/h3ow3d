@@ -1,8 +1,17 @@
 import { useState } from 'react'
+import { useEffect } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import './UserProfile.css'
 
 function UserProfile({ onBack }) {
+  useEffect(() => {
+    window.awsRum?.recordEvent('profile_rendered', { timestamp: Date.now() })
+  }, [])
+  const handleEdit = (changes) => {
+    window.awsRum?.recordEvent('profile_edited', { changes })
+    // ...existing edit logic...
+  }
+  // Removed unused handleEdit
   const { user, isAuthenticated, signOut } = useAuth()
   const [activeTab, setActiveTab] = useState('profile')
 

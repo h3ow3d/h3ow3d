@@ -1,7 +1,16 @@
 import React, { useState } from 'react'
+import { useEffect } from 'react'
 import './SourceMapDemo.css'
 
 function SourceMapDemo({ onBack }) {
+  useEffect(() => {
+    window.awsRum?.recordEvent('sourcemap_demo_rendered', { timestamp: Date.now() })
+  }, [])
+  // Removed unused handleDemoAction
+  // const handleDemoAction = (action) => {
+  //   window.awsRum?.recordEvent('sourcemap_demo_action', { action })
+  //   // ...existing demo logic...
+  // }
   const [, setErrorType] = useState(null)
 
   // Various error scenarios

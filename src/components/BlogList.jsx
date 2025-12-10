@@ -1,8 +1,16 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { format } from 'date-fns'
 import './BlogList.css'
 
 function BlogList({ posts, onPostClick }) {
+  useEffect(() => {
+    window.awsRum?.recordEvent('blog_list_rendered', { postCount: posts.length })
+    const handleScroll = () => {
+      window.awsRum?.recordEvent('blog_list_scrolled', { scrollY: window.scrollY })
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [posts])
   const handleCardClick = (post) => {
     // Track post card engagement
     window.awsRum?.recordEvent('post_card_clicked', {

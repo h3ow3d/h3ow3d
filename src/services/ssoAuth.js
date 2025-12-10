@@ -1,3 +1,4 @@
+// Removed unused instrumentation functions
 const COGNITO_DOMAIN = import.meta.env.VITE_COGNITO_DOMAIN
 const CLIENT_ID = import.meta.env.VITE_COGNITO_CLIENT_ID
 const REDIRECT_URI = import.meta.env.VITE_REDIRECT_URI || window.location.origin

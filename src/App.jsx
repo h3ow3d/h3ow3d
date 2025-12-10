@@ -12,11 +12,47 @@ function AppContent() {
   const [selectedPost, setSelectedPost] = useState(null)
   const [showDemo, setShowDemo] = useState(false)
   const [showProfile, setShowProfile] = useState(false)
+  // Track app load
+  useEffect(() => {
+    window.awsRum?.recordEvent('app_loaded', {
+      timestamp: Date.now(),
+    })
+  }, [])
+
+  // Track route changes (selectedPost, showDemo, showProfile)
+  useEffect(() => {
+    let route = 'home'
+    if (selectedPost) route = `post/${selectedPost.id}`
+    else if (showDemo) route = 'demo'
+    else if (showProfile) route = 'profile'
+    window.awsRum?.recordEvent('route_change', {
+      route,
+      timestamp: Date.now(),
+    })
+  }, [selectedPost, showDemo, showProfile])
   // Initialize theme from localStorage directly instead of in effect
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem('theme') || 'dark'
   })
 
+  // Track app load
+  useEffect(() => {
+    window.awsRum?.recordEvent('app_loaded', {
+      timestamp: Date.now(),
+    })
+  }, [])
+
+  // Track route changes (selectedPost, showDemo, showProfile)
+  useEffect(() => {
+    let route = 'home'
+    if (selectedPost) route = `post/${selectedPost.id}`
+    else if (showDemo) route = 'demo'
+    else if (showProfile) route = 'profile'
+    window.awsRum?.recordEvent('route_change', {
+      route,
+      timestamp: Date.now(),
+    })
+  }, [selectedPost, showDemo, showProfile])
   useEffect(() => {
     // Only update DOM attribute when theme changes
     document.documentElement.setAttribute('data-theme', theme)

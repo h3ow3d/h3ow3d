@@ -6,6 +6,10 @@ import Comments from './Comments'
 import './BlogPost.css'
 
 function BlogPost({ post, onBack }) {
+  useEffect(() => {
+    window.awsRum?.recordEvent('blog_post_rendered', { postId: post.id, title: post.title })
+  }, [post])
+  // Remove unused handlers or implement them in the UI if needed
   const startTimeRef = useRef(null)
 
   useEffect(() => {
