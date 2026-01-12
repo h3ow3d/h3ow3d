@@ -29,6 +29,6 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "gray-matter": "^4.0.3",
     "prettier": "^3.7.4",
-    "vite": "^5.0.8"
+    "vite": "^7.3.1"
   }
 }
